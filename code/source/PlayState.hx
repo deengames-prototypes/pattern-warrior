@@ -4,6 +4,7 @@ import flixel.FlxG;
 import flixel.math.FlxRandom;
 import turbo.ecs.TurboState;
 import turbo.ecs.Entity;
+import turbo.ecs.components.ImageComponent;
 
 class PlayState extends TurboState
 {
@@ -32,9 +33,12 @@ class PlayState extends TurboState
 				var x = j * TILE_WIDTH + 32;
 				var y = i * TILE_HEIGHT + 32;
 				trace('${tileType} at (${x}, ${y})');
-				this.entities.push(new Entity()
+				
+				var tile = new Entity()
 					.image('assets/images/${tileType}.png')
-					.move(x, y));
+					.move(x, y);
+				this.entities.push(tile);
+				this.tiles.push(tile);
 			}
 			groups.push(currentGroup);
 		}
@@ -42,6 +46,10 @@ class PlayState extends TurboState
 		this.entities.push(playButton);
 		playButton.image("assets/images/start.png").move(250, 800).onClick(function(x, y) {
 			playButton.hide();
+			for (tile in tiles)
+			{
+				tile.get(ImageComponent).setImage("assets/images/blank.png");
+			}
 		});
 	}
 

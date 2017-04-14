@@ -60,4 +60,10 @@ class ImageComponent extends SpriteComponent
         this.sprite.alpha = value;
         return value;
     }
+
+    public function setImage(image:String):Void
+    {
+        this.image = image;
+        this.sprite.loadGraphic(image);
+    }
 }

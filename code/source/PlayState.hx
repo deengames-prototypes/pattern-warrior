@@ -28,8 +28,6 @@ class PlayState extends FlxState
 			}
 			groups.push(currentGroup);
 		}
-
-		trace('Done: ${groups}');
 	}
 
 	override public function update(elapsed:Float):Void

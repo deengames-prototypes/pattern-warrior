@@ -23,6 +23,7 @@ class PlayState extends TurboState
 	private var tiles = new Array<Tile>();
 	private var tileSprites = new Array<Entity>();
 	private var inputControls = new Array<Entity>(); // match order of ALL_TILES
+	private var userInput = new Array<Tile>();
 
 	override public function create():Void
 	{
@@ -71,6 +72,7 @@ class PlayState extends TurboState
 		var e = new Entity();
 		var pos = playButton.get(PositionComponent);
 
+		e.setData("tile", tile);
 		e.image('assets/images/${tile}.png');
 		if (tile == Tile.Up || tile == Tile.Down)
 		{
@@ -84,6 +86,11 @@ class PlayState extends TurboState
 			var y = pos.y - 200;
 			e.move(x, y);
 		}
+
+		e.onClick(function(x, y) {
+			trace('Clicked on ${e.getData("tile")}!');
+		});
+
 		this.entities.push(e);
 		this.inputControls.push(e);
 	}

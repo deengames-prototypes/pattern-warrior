@@ -13,6 +13,7 @@ class Entity
 {
     private var components:Map<String, AbstractComponent>;
     private var tags(default, null):Array<String>;
+    private var data = new Map<String, Any>();
     
     public function new()
     {
@@ -125,8 +126,6 @@ class Entity
     }
     
     /////////////////////// End fluent API ///////////////////////
-
-
     
     // You can only have one of each component by type
     public function add(component:AbstractComponent):Entity
@@ -193,5 +192,15 @@ class Entity
         {
             component.update(elapsedSeconds);
         }
+    }
+
+    public function setData(key:String, data:Any):Void
+    {
+        this.data.set(key, data);
+    }
+
+    public function getData(key:String):Any
+    {
+        return this.data.get(key);
     }
 }

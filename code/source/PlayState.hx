@@ -1,14 +1,10 @@
 package;
 
 import flixel.FlxG;
-import flixel.FlxSprite;
-import flixel.FlxState;
-import flixel.text.FlxText;
-import flixel.ui.FlxButton;
-import flixel.math.FlxMath;
 import flixel.math.FlxRandom;
+import turbo.ecs.TurboState;
 
-class PlayState extends FlxState
+class PlayState extends TurboState
 {
 	private static inline var NUM_GROUPS:Int = 3;
 	private static inline var GROUP_SIZE:Int = 1;

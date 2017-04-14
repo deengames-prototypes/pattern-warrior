@@ -50,6 +50,16 @@ class Entity
         this.add(new HealthComponent(maximumHealth, this));
         return this;
     }
+
+    public function hide():Entity
+    {
+        var img = this.get(ImageComponent);
+        if (img != null)
+        {
+            img.sprite.alpha = 0;
+        }
+        return this;
+    }
     
     public function image(image:String, repeat:Bool = false):Entity
     {

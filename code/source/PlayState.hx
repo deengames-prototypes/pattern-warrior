@@ -16,7 +16,7 @@ class PlayState extends TurboState
 	private static inline var TILE_HEIGHT:Int = 64;
 
 	private var random = new FlxRandom();
-
+	private var playButton = new Entity();
 	private var tiles = new Array<Entity>();
 
 	override public function create():Void
@@ -38,6 +38,11 @@ class PlayState extends TurboState
 			}
 			groups.push(currentGroup);
 		}
+
+		this.entities.push(playButton);
+		playButton.image("assets/images/start.png").move(250, 800).onClick(function(x, y) {
+			playButton.hide();
+		});
 	}
 
 	override public function update(elapsed:Float):Void

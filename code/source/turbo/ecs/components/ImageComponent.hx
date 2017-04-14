@@ -10,6 +10,7 @@ class ImageComponent extends SpriteComponent
     public static var onAdd:ImageComponent->Void;
 
     public var image:String = "";
+    public var alpha(get, set):Float;
     
     // internal
     public var isRepeating:Bool;
@@ -47,5 +48,16 @@ class ImageComponent extends SpriteComponent
                 this.sprite.y = position.y;        
             }
         }
+    }
+
+    public function get_alpha():Float
+    {
+        return this.sprite.alpha;
+    }
+
+    public function set_alpha(value:Float):Float
+    {
+        this.sprite.alpha = value;
+        return value;
     }
 }

@@ -49,7 +49,9 @@ class PlayState extends TurboState
 
 		this.entities.push(playButton);
 		playButton.image("assets/images/start.png").move(250, 800).onClick(function(x, y) {
-			playButton.hide();
+			
+			this.showInputControls();
+
 			for (tile in tileSprites)
 			{
 				tile.get(ImageComponent).setImage("assets/images/blank.png");
@@ -60,6 +62,8 @@ class PlayState extends TurboState
 		{
 			this.addInputControl(tile);
 		}
+
+		this.hideInputControls();
 	}
 
 	override public function update(elapsed:Float):Void
@@ -79,9 +83,7 @@ class PlayState extends TurboState
 			var x = pos.x;
 			var y = pos.y - 200 + (tile == Tile.Up ?  -TILE_HEIGHT : TILE_HEIGHT);
 			e.move(x, y);
-		} 
-		else
-		{
+		} else {
 			var x = pos.x + (tile == Tile.Left ? -TILE_WIDTH : TILE_WIDTH);
 			var y = pos.y - 200;
 			e.move(x, y);
@@ -93,6 +95,37 @@ class PlayState extends TurboState
 
 		this.entities.push(e);
 		this.inputControls.push(e);
+	}
+
+	private function hideInputControls():Void
+	{
+		this.setInputControlsVisibility(false);
+	}
+
+	private function showInputControls():Void
+	{
+		this.setInputControlsVisibility(true);
+	}
+
+	private function setInputControlsVisibility(visible:Bool):Void
+	{
+		for (e in this.inputControls)
+		{
+			if (visible == true)
+			{
+				e.show();
+			} else {
+				e.hide();
+			}
+		}
+
+		// Play button is invisbile when controls are visible, and vice-versa
+		if (visible == true)
+		{
+			playButton.hide();			
+		} else {
+			playButton.show();
+		}
 	}
 }
 

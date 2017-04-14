@@ -93,6 +93,16 @@ class Entity
         this.add(mouseComponent);
         return this;
     }
+
+    public function show():Entity
+    {
+        var img = this.get(ImageComponent);
+        if (img != null)
+        {
+            img.sprite.alpha = 1;
+        }
+        return this;
+    }
     
     public function size(width:Int, height:Int):Entity
     {

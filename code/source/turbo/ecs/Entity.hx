@@ -56,7 +56,7 @@ class Entity
         this.add(new ImageComponent(image, repeat, this));
         if (!this.has(PositionComponent))
         {
-            this.add(new PositionComponent(0, 0, this));
+            this.move(0, 0);
         }
         return this;
     }
@@ -64,7 +64,6 @@ class Entity
     public function move(x:Int, y:Int):Entity
     {
         this.add(new PositionComponent(x, y, this));
-        
         this.onEvent("Moved");
 
         return this;
@@ -124,10 +123,11 @@ class Entity
     {
         var clazz = Type.getClass(component);
         var name = Type.getClassName(clazz);
-        if (!this.has(clazz))
+        if (this.has(clazz))
         {
-            this.components.set(name, component);
+            this.remove(clazz);
         }
+        this.components.set(name, component);
         return this;
     }
     

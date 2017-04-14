@@ -39,8 +39,13 @@ class ImageComponent extends SpriteComponent
     {
         super.onEvent(event);
 
-        var position = this.parent.get(PositionComponent);
-        this.sprite.x = position.x;
-        this.sprite.y = position.y;        
+        if (event == "Moved") {
+            var position = this.parent.get(PositionComponent);
+            if (position != null)
+            {
+                this.sprite.x = position.x;
+                this.sprite.y = position.y;        
+            }
+        }
     }
 }

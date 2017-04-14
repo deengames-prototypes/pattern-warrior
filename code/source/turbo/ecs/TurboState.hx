@@ -14,13 +14,14 @@ class TurboState extends FlxState
     {
         super.create();        
 
-        // TODO: this is infrastructure
         ImageComponent.onAdd = function(i) {
             this.add(i.sprite);
         }
+
         ColourComponent.onAdd = function(c) {
             this.add(c.sprite);
         }
+
         ColourComponent.onRemove = function(c) {
             this.remove(c.sprite);
         }

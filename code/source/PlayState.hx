@@ -20,9 +20,11 @@ class PlayState extends TurboState
 	private var random = new FlxRandom();
 	private var playButton = new Entity();
 
-	private var tiles = new Array<Tile>();
+	// Corresponding sprites for "tiles". data["tile"] is the tile name
 	private var tileSprites = new Array<Entity>();
+	// UI buttons, including play, and user input
 	private var inputControls = new Array<Entity>(); // match order of ALL_TILES
+	// What the user told us the tiles are
 	private var userInput = new Array<Tile>();
 
 	override public function create():Void
@@ -33,7 +35,6 @@ class PlayState extends TurboState
 		for (i in 0 ... NUM_GROUPS) {
 			for (j in 0 ... GROUP_SIZE) {
 				var tileType:Tile = random.getObject(ALL_TILES);
-				tiles.push(tileType);
 				
 				var x = j * TILE_WIDTH + 32;
 				var y = i * TILE_HEIGHT + 32;
@@ -43,6 +44,8 @@ class PlayState extends TurboState
 				var tile = new Entity()
 					.image('assets/images/${tileName}.png')
 					.move(x, y);
+				
+				tile.setData("tile", tileName);
 
 				this.entities.push(tile);
 				this.tileSprites.push(tile);
@@ -50,14 +53,18 @@ class PlayState extends TurboState
 		}
 
 		this.entities.push(playButton);
-		playButton.image("assets/images/start.png").move(250, 800).onClick(function(x, y) {
-			
-			this.showInputControls();
 
+		playButton.image("assets/images/start.png").move(250, 800).onClick(function(x, y)
+		{
+			this.showInputControls();
+			
+			// Blank out inputs
 			for (tile in tileSprites)
 			{
 				tile.get(ImageComponent).setImage("assets/images/blank.png");
 			}
+
+			this.showCurrentTile(0);			
 		});
 
 		for (tile in ALL_TILES)
@@ -79,7 +86,7 @@ class PlayState extends TurboState
 		var pos = playButton.get(PositionComponent);
 
 		var tileName = '${tile}'.toLowerCase();
-		e.setData("tile", tileName);
+		e.setData("tile", tile);
 		e.image('assets/images/${tileName}.png');
 		if (tile == Tile.Up || tile == Tile.Down)
 		{
@@ -129,6 +136,12 @@ class PlayState extends TurboState
 		} else {
 			playButton.show();
 		}
+	}
+
+	private function showCurrentTile(index:Int):Void
+	{
+		this.tileSprites[index].get(ImageComponent).setImage("assets/images/current.png");
+		trace(this.tileSprites[index].get(ImageComponent));
 	}
 }
 

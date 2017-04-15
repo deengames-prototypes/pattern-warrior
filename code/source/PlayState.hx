@@ -27,11 +27,12 @@ class PlayState extends TurboState
 	// What the user told us the tiles are
 	private var userInput = new Array<Tile>();
 
+	private var rightThisRound:Int = 0;
+
 	override public function create():Void
 	{
 		super.create();
 
-		var groups:Array<Array<Tile>> = [];
 		for (i in 0 ... NUM_GROUPS) {
 			for (j in 0 ... GROUP_SIZE) {
 				var tileType:Tile = random.getObject(ALL_TILES);
@@ -46,7 +47,6 @@ class PlayState extends TurboState
 					.move(x, y);
 				
 				tile.setData("tile", tileType);
-
 				this.entities.push(tile);
 				this.tileSprites.push(tile);
 			}
@@ -161,16 +161,39 @@ class PlayState extends TurboState
 		{
 			name = '${expected}-wrong'.toLowerCase();
 		}
+		else
+		{
+			rightThisRound++;
+		}
+
 		sprite.get(ImageComponent).setImage('assets/images/${name}.png');
 		
 		userInput.push(input);
 		if (index == this.tileSprites.length - 1)
 		{
 			// That was the last one. We're done.
+			this.generateNewPattern();
+			this.hideInputControls();
+			trace('${rightThisRound}/${this.tileSprites.length} right');
+			userInput = new Array<Tile>(); // no .clear method?!
 		}
 		else
 		{
 			this.showCurrentTile(index + 1);
+		}
+	}
+
+	// Assumes controls are already created
+	private function generateNewPattern():Void
+	{
+		for (i in 0 ... NUM_GROUPS) {
+			for (j in 0 ... GROUP_SIZE) {
+				var tile:Tile = random.getObject(ALL_TILES);
+				var sprite = this.tileSprites[i * GROUP_SIZE + j];
+				sprite.setData("tile", tile);
+				var tileName = '${tile}'.toLowerCase();
+				sprite.get(ImageComponent).setImage('assets/images/${tileName}.png');
+			}
 		}
 	}
 }

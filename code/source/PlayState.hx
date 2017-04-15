@@ -38,8 +38,10 @@ class PlayState extends TurboState
 				var x = j * TILE_WIDTH + 32;
 				var y = i * TILE_HEIGHT + 32;
 				
+				var tileName:String = '${tileType}'.toLowerCase();
+
 				var tile = new Entity()
-					.image('assets/images/${tileType}.png')
+					.image('assets/images/${tileName}.png')
 					.move(x, y);
 
 				this.entities.push(tile);
@@ -76,8 +78,9 @@ class PlayState extends TurboState
 		var e = new Entity();
 		var pos = playButton.get(PositionComponent);
 
-		e.setData("tile", tile);
-		e.image('assets/images/${tile}.png');
+		var tileName = '${tile}'.toLowerCase();
+		e.setData("tile", tileName);
+		e.image('assets/images/${tileName}.png');
 		if (tile == Tile.Up || tile == Tile.Down)
 		{
 			var x = pos.x;

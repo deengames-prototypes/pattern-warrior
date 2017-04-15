@@ -45,7 +45,7 @@ class PlayState extends TurboState
 					.image('assets/images/${tileName}.png')
 					.move(x, y);
 				
-				tile.setData("tile", tileName);
+				tile.setData("tile", tileType);
 
 				this.entities.push(tile);
 				this.tileSprites.push(tile);
@@ -93,14 +93,17 @@ class PlayState extends TurboState
 			var x = pos.x;
 			var y = pos.y - 200 + (tile == Tile.Up ?  -TILE_HEIGHT : TILE_HEIGHT);
 			e.move(x, y);
-		} else {
+		}
+		else
+		{
 			var x = pos.x + (tile == Tile.Left ? -TILE_WIDTH : TILE_WIDTH);
 			var y = pos.y - 200;
 			e.move(x, y);
 		}
 
-		e.onClick(function(x, y) {
-			trace('Clicked on ${e.getData("tile")}!');
+		e.onClick(function(x, y)
+		{
+			this.processInput(e.getData("tile"));
 		});
 
 		this.entities.push(e);
@@ -124,7 +127,9 @@ class PlayState extends TurboState
 			if (visible == true)
 			{
 				e.show();
-			} else {
+			}
+			else
+			{
 				e.hide();
 			}
 		}
@@ -141,11 +146,37 @@ class PlayState extends TurboState
 	private function showCurrentTile(index:Int):Void
 	{
 		this.tileSprites[index].get(ImageComponent).setImage("assets/images/current.png");
-		trace(this.tileSprites[index].get(ImageComponent));
+	}
+
+	// Process something the user inputted, marking the state as correct
+	// or incorrect; possibly switching back if this was the last input.
+	private function processInput(input:Tile):Void
+	{
+		var index = userInput.length;
+		var sprite = this.tileSprites[index];
+		var expected:Tile = sprite.getData("tile");
+		var name = '${input}'.toLowerCase();
+
+		if (expected != input)
+		{
+			name = '${expected}-wrong'.toLowerCase();
+		}
+		sprite.get(ImageComponent).setImage('assets/images/${name}.png');
+		
+		userInput.push(input);
+		if (index == this.tileSprites.length - 1)
+		{
+			// That was the last one. We're done.
+		}
+		else
+		{
+			this.showCurrentTile(index + 1);
+		}
 	}
 }
 
-enum Tile {
+enum Tile
+{
 	Up;
 	Right;
 	Down;

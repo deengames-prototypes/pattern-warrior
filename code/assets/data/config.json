@@ -1,0 +1,9 @@
+{
+    "isWorking": true,
+    "array": [1, 2, 3],
+    "object": {
+        "name": "cat",
+        "age": 27,
+        "prey": ["mice", "rats"]
+    }
+}

@@ -15,7 +15,8 @@ class Entity
     private var components:Map<String, AbstractComponent>;
     private var tags(default, null):Array<String>;
     private var data = new Map<String, Any>();
-    
+    private var everyFrame:Void->Void;
+
     public function new()
     {
         this.components = new Map<String, AbstractComponent>();
@@ -90,6 +91,12 @@ class Entity
     {
         var mouseComponent:MouseClickComponent = new MouseClickComponent(callback, null, this);
         this.add(mouseComponent);
+        return this;
+    }
+
+    public function onEveryFrame(callback:Void->Void):Entity
+    {
+        this.everyFrame = callback;
         return this;
     }
 
@@ -207,15 +214,22 @@ class Entity
         {
             component.update(elapsedSeconds);
         }
+
+        if (this.everyFrame != null)
+        {
+            this.everyFrame();
+        }
+    }
+
+    // data: generic key/value pairs
+
+    public function getData(key:String):Any
+    {
+        return this.data.get(key);
     }
 
     public function setData(key:String, data:Any):Void
     {
         this.data.set(key, data);
-    }
-
-    public function getData(key:String):Any
-    {
-        return this.data.get(key);
     }
 }

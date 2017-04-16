@@ -19,7 +19,6 @@ class Config
         }
 
         var toReturn = values.get(key);
-        trace("Toreturn = " + toReturn);
         return toReturn;
     }
 

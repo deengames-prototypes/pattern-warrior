@@ -10,17 +10,28 @@ class Config
     // There's no easy way to access a field by field name in Haxe.
     // Using reflection gives us deplorable runtime. So, cache.
     ///
+    @:expose // expose to JS    
     public static function get(key:String):Any
     {
         if (values == null)
         {
-            trace("Loading cache");
             loadAndCacheJson();
         }
 
         var toReturn = values.get(key);
         trace("Toreturn = " + toReturn);
         return toReturn;
+    }
+
+    @:expose
+    public static function set(key:String, value:Any):Void
+    {
+        if (values == null)
+        {
+            loadAndCacheJson();
+        }
+
+        values.set(key, value);
     }
 
     private static function loadAndCacheJson():Void

@@ -33,15 +33,16 @@ class ColourComponent extends SpriteComponent
         }
     }
 
-    override public function onEvent(event:String)
+    override public function update(elapsedSeconds:Float):Void
     {
-        super.onEvent(event);
-
         var position = this.parent.get(PositionComponent);
-        this.sprite.x = position.x;
-        this.sprite.y = position.y;        
+        if (position != null)
+        {
+            this.sprite.x = position.x;
+            this.sprite.y = position.y;        
+        }
     }
-
+    
     private function makeSprite():FlxSprite
     {
         var toReturn:FlxSprite = new FlxSprite();

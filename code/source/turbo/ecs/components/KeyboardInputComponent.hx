@@ -48,11 +48,6 @@ class KeyboardInputComponent extends AbstractComponent
             
             position.x += dx;
             position.y += dy;
-
-            if (dx != 0 || dy != 0)
-            {
-                this.trigger("Moved");    
-            }
         }
     }
 

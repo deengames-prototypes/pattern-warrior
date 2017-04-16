@@ -36,17 +36,14 @@ class ImageComponent extends SpriteComponent
         }
     }
 
-    override public function onEvent(event:String)
-    {
-        super.onEvent(event);
 
-        if (event == "Moved") {
-            var position = this.parent.get(PositionComponent);
-            if (position != null)
-            {
-                this.sprite.x = position.x;
-                this.sprite.y = position.y;        
-            }
+    override public function update(elapsedSeconds:Float):Void
+    {
+        var position = this.parent.get(PositionComponent);
+        if (position != null)
+        {
+            this.sprite.x = position.x;
+            this.sprite.y = position.y;        
         }
     }
 

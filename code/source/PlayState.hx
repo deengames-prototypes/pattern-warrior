@@ -2,6 +2,9 @@ package;
 
 import flixel.FlxG;
 import flixel.math.FlxRandom;
+
+import models.Player;
+
 import turbo.ecs.TurboState;
 import turbo.ecs.Entity;
 import turbo.ecs.components.ImageComponent;
@@ -29,6 +32,9 @@ class PlayState extends TurboState
 	private var userInput = new Array<Tile>();
 
 	private var rightThisRound:Int = 0;
+
+	// Data objects!
+	private var player:Player;
 
 	override public function create():Void
 	{
@@ -74,7 +80,10 @@ class PlayState extends TurboState
 
 		this.hideInputControls();
 
-		this.entities.push(new Entity().text("Health: 50", 24).move(400, 25));
+		this.player = new Player();
+		this.player.move(400, 25);
+		this.entities.push(this.player);
+		trace(this.player.get(turbo.ecs.components.HealthComponent).currentHealth);
 	}
 
 	override public function update(elapsed:Float):Void

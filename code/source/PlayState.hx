@@ -73,6 +73,8 @@ class PlayState extends TurboState
 		}
 
 		this.hideInputControls();
+
+		this.entities.push(new Entity().text("Health: 50", 24).move(400, 25));
 	}
 
 	override public function update(elapsed:Float):Void

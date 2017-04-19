@@ -10,6 +10,6 @@ class Player extends Entity
     {
         super();
         var totalHealth:Int = Config.get("playerHealth");
-        this.health(totalHealth).text('Health: ${this.get(HealthComponent).currentHealth}', 24);
+        this.health(totalHealth);
     }
 }

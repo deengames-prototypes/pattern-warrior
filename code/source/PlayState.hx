@@ -40,7 +40,7 @@ class PlayState extends TurboState
 
 	// Data objects!
 	private var player:Player;
-	private var opponent = new Monster();
+	private var opponent:Monster;
 
 	override public function create():Void
 	{
@@ -92,12 +92,18 @@ class PlayState extends TurboState
 		// Text that shows health
 		healthText = new Entity()
 			.text('Health: ${this.player.get(HealthComponent).currentHealth}', 24)
-			.move(425, 0);
+			.move(400, 32);
 
 		this.entities.push(healthText);
+		
+		this.opponent = new Monster();
+		this.entities.push(this.opponent);
+		opponent.move(32, 325 + 16 + 24);
+		opponent.size(64, 64);
 
 		opponentHealthText = new Entity()
-			.text('Opponent: ${this.opponent.get(HealthComponent).currentHealth}', 24);
+			.text('${this.opponent.getData("name")}: ${this.opponent.get(HealthComponent).currentHealth}', 24)
+			.move(32, 325);
 
 		this.entities.push(opponentHealthText);
 	}

@@ -1,3 +1,5 @@
 {
-    "playerHealth": 50
+    "playerHealth": 50,
+    "damagePerHit": 5,
+    "damagePerMiss": 2
 }

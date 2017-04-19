@@ -6,16 +6,20 @@ import flixel.math.FlxRandom;
 import models.Monster;
 import models.Player;
 
+import turbo.Config;
 import turbo.ecs.TurboState;
 import turbo.ecs.Entity;
 import turbo.ecs.components.HealthComponent;
 import turbo.ecs.components.ImageComponent;
 import turbo.ecs.components.PositionComponent;
+import turbo.ecs.components.TextComponent;
 
 class PlayState extends TurboState
 {
 	private static inline var MAX_TILES_PER_ROW:Int = 8; // 8 fit in a single row on-screen
 	private static inline var MAX_GOUPS:Int = 5; // 5 groups max.
+	private static var DAMAGE_PER_HIT:Int;
+	private static var DAMAGE_PER_MISS:Int;
 
 	private static var ALL_TILES:Array<Tile> = [Tile.Up, Tile.Right, Tile.Down, Tile.Left];
 	private static inline var TILE_WIDTH:Int = 64;
@@ -33,7 +37,7 @@ class PlayState extends TurboState
 	private var inputControls = new Array<Entity>(); // match order of ALL_TILES
 	private var userInput = new Array<Tile>();
 
-	private var rightThisRound:Int = 0;
+	private var damageThisRound:Int = 0;
 
 	private var healthText:Entity;
 	private var opponentHealthText:Entity;
@@ -45,6 +49,9 @@ class PlayState extends TurboState
 	override public function create():Void
 	{
 		super.create();
+
+		DAMAGE_PER_HIT = Config.get("damagePerHit");
+		DAMAGE_PER_MISS = Config.get("damagePerMiss");
 
 		for (i in 0 ... MAX_GOUPS) {
 			for (j in 0 ... MAX_TILES_PER_ROW) {
@@ -102,10 +109,11 @@ class PlayState extends TurboState
 		opponent.size(64, 64);
 
 		opponentHealthText = new Entity()
-			.text('${this.opponent.getData("name")}: ${this.opponent.get(HealthComponent).currentHealth}', 24)
+			.text("Placeholder!", 24)
 			.move(32, 325);
-
+			
 		this.entities.push(opponentHealthText);
+		this.updateOpponentHealthText();		
 	}
 
 	override public function update(elapsed:Float):Void
@@ -193,10 +201,11 @@ class PlayState extends TurboState
 		if (expected != input)
 		{
 			name = '${expected}-wrong'.toLowerCase();
+			damageThisRound -= DAMAGE_PER_MISS;
 		}
 		else
 		{
-			rightThisRound++;
+			damageThisRound += DAMAGE_PER_HIT;
 		}
 
 		sprite.get(ImageComponent).setImage('assets/images/${name}.png');
@@ -204,9 +213,16 @@ class PlayState extends TurboState
 		userInput.push(input);
 		if (index == numGroups * groupSize - 1)
 		{
+			// no negative damage
+			if (damageThisRound < 0) 
+			{
+				damageThisRound = 0;
+			}
+			this.opponent.get(HealthComponent).damage(damageThisRound);
+			this.updateOpponentHealthText();
+
 			// score
-			trace('${rightThisRound}/${groupSize * numGroups} right');
-			rightThisRound = 0;
+			damageThisRound = 0;
 			userInput = new Array<Tile>(); // no .clear method?!
 
 			// Scale difficulty. Fast.
@@ -257,6 +273,12 @@ class PlayState extends TurboState
 		var index = y * MAX_TILES_PER_ROW + x;
 		var sprite = this.tileSprites[index];
 		return sprite;
+	}
+
+	private function updateOpponentHealthText():Void
+	{
+		var text = '${this.opponent.getData("name")}: ${this.opponent.get(HealthComponent).currentHealth}';
+		this.opponentHealthText.get(TextComponent).setText(text);
 	}
 }
 

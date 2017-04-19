@@ -3,6 +3,7 @@ package;
 import flixel.FlxG;
 import flixel.math.FlxRandom;
 
+import models.Monster;
 import models.Player;
 
 import turbo.ecs.TurboState;
@@ -35,9 +36,11 @@ class PlayState extends TurboState
 	private var rightThisRound:Int = 0;
 
 	private var healthText:Entity;
+	private var opponentHealthText:Entity;
 
 	// Data objects!
 	private var player:Player;
+	private var opponent = new Monster();
 
 	override public function create():Void
 	{
@@ -89,9 +92,14 @@ class PlayState extends TurboState
 		// Text that shows health
 		healthText = new Entity()
 			.text('Health: ${this.player.get(HealthComponent).currentHealth}', 24)
-			.move(400, 25);
+			.move(425, 0);
 
 		this.entities.push(healthText);
+
+		opponentHealthText = new Entity()
+			.text('Opponent: ${this.opponent.get(HealthComponent).currentHealth}', 24);
+
+		this.entities.push(opponentHealthText);
 	}
 
 	override public function update(elapsed:Float):Void

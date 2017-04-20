@@ -42,6 +42,7 @@ class PlayState extends TurboState
 
 	private var healthText:Entity;
 	private var opponentHealthText:Entity;
+	private var statusText:Entity;
 
 	// Data objects!
 	private var player:Player;
@@ -117,6 +118,9 @@ class PlayState extends TurboState
 			
 		this.entities.push(opponentHealthText);
 		this.updateOpponentHealthText();		
+
+		statusText = new Entity().text("Memorize and attack!", 16).move(25, 725);
+		this.entities.push(statusText);
 	}
 
 	override public function update(elapsed:Float):Void
@@ -221,8 +225,12 @@ class PlayState extends TurboState
 			{
 				damageThisRound = 0;
 			}
+
 			this.opponent.get(HealthComponent).damage(damageThisRound);
 			this.updateOpponentHealthText();
+
+			var ifDeadMessage:String = this.opponent.get(HealthComponent).currentHealth <= 0 ? '${this.opponent.getData("name")} dies!' : "";
+			this.statusText.get(TextComponent).setText('Hit for ${damageThisRound} damage! ${ifDeadMessage}');
 
 			// score
 			damageThisRound = 0;

@@ -18,6 +18,7 @@ class PlayState extends TurboState
 {
 	private static inline var MAX_TILES_PER_ROW:Int = 8; // 8 fit in a single row on-screen
 	private static inline var MAX_GOUPS:Int = 5; // 5 groups max.
+	private static inline var ROW_SPACING:Int = 24;
 	private static var DAMAGE_PER_HIT:Int;
 	private static var DAMAGE_PER_MISS:Int;
 
@@ -58,7 +59,9 @@ class PlayState extends TurboState
 				var tileType:Tile = random.getObject(ALL_TILES);
 				
 				var x = j * TILE_WIDTH + 32;
-				var y = i * TILE_HEIGHT + 32;
+				// Space out rows 32px high, plus padding between (i-1 * 16).
+				// This makes things separate into rows so users don't get confused.
+				var y = (i * TILE_HEIGHT + 32) + ((i + 1) * ROW_SPACING);
 				
 				var tile = new Entity()
 					.image("assets/images/blank.png")
@@ -105,12 +108,12 @@ class PlayState extends TurboState
 		
 		this.opponent = new Monster();
 		this.entities.push(this.opponent);
-		opponent.move(32, 325 + 16 + 24);
+		opponent.move(32, 400 + 16 + 24);
 		opponent.size(64, 64);
 
 		opponentHealthText = new Entity()
 			.text("Placeholder!", 24)
-			.move(32, 325);
+			.move(32, 400);
 			
 		this.entities.push(opponentHealthText);
 		this.updateOpponentHealthText();		

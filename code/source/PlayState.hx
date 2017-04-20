@@ -227,10 +227,19 @@ class PlayState extends TurboState
 			}
 
 			this.opponent.get(HealthComponent).damage(damageThisRound);
-			this.updateOpponentHealthText();
 
 			var ifDeadMessage:String = this.opponent.get(HealthComponent).currentHealth <= 0 ? '${this.opponent.getData("name")} dies!' : "";
 			this.statusText.get(TextComponent).setText('Hit for ${damageThisRound} damage! ${ifDeadMessage}');
+
+			// Spawn new monster if dead
+			if (this.opponent.get(HealthComponent).currentHealth <= 0)
+			{
+				this.entities.remove(this.opponent);
+				this.opponent = new Monster();
+				this.entities.push(this.opponent);
+			}
+
+			this.updateOpponentHealthText();
 
 			// score
 			damageThisRound = 0;

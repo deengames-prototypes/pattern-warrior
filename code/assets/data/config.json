@@ -1,5 +1,6 @@
 {
     "playerHealth": 50,
     "damagePerHit": 5,
-    "damagePerMiss": 2
+    "damagePerMiss": 2,
+    "damagePerMissedBlock": 5
 }

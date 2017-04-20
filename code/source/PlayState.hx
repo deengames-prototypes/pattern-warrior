@@ -19,8 +19,11 @@ class PlayState extends TurboState
 	private static inline var MAX_TILES_PER_ROW:Int = 8; // 8 fit in a single row on-screen
 	private static inline var MAX_GOUPS:Int = 5; // 5 groups max.
 	private static inline var ROW_SPACING:Int = 24;
-	private static var DAMAGE_PER_HIT:Int;
-	private static var DAMAGE_PER_MISS:Int;
+	// From config.json. But Config.get(...) throws null if used here.
+	// Probably because openfl didn't load assets yet or something.
+	private static var DAMAGE_PER_ATTACK:Int;
+	private static var DAMAGE_PER_MISSED_ATTACK:Int;
+	private static var DAMAGE_PER_MISSED_BLOCK:Int;
 
 	private static var ALL_TILES:Array<Tile> = [Tile.Up, Tile.Right, Tile.Down, Tile.Left];
 	private static inline var TILE_WIDTH:Int = 64;
@@ -47,13 +50,15 @@ class PlayState extends TurboState
 	// Data objects!
 	private var player:Player;
 	private var opponent:Monster;
+	private var currentTurn:WhoseTurn = WhoseTurn.Player;
 
 	override public function create():Void
 	{
 		super.create();
 
-		DAMAGE_PER_HIT = Config.get("damagePerHit");
-		DAMAGE_PER_MISS = Config.get("damagePerMiss");
+		DAMAGE_PER_ATTACK = Config.get("damagePerHit");
+		DAMAGE_PER_MISSED_ATTACK = Config.get("damagePerMiss");
+		DAMAGE_PER_MISSED_BLOCK = Config.get("damagePerMissedBlock");
 
 		for (i in 0 ... MAX_GOUPS) {
 			for (j in 0 ... MAX_TILES_PER_ROW) {
@@ -205,14 +210,26 @@ class PlayState extends TurboState
 		var expected:Tile = sprite.getData("tile");
 		var name = '${input}'.toLowerCase();
 
-		if (expected != input)
+		if (expected == input)
 		{
-			name = '${expected}-wrong'.toLowerCase();
-			damageThisRound -= DAMAGE_PER_MISS;
+			// successful attack = DAMAGE_PER_ATTACK damage; successful block = 0 damage
+			if (currentTurn == WhoseTurn.Player)
+			{
+				damageThisRound += DAMAGE_PER_ATTACK;
+			}						
 		}
 		else
 		{
-			damageThisRound += DAMAGE_PER_HIT;
+			name = '${expected}-wrong'.toLowerCase();
+			// unsucessful attack or block
+			if (currentTurn == WhoseTurn.Player)
+			{
+				damageThisRound -=  DAMAGE_PER_MISSED_ATTACK;
+			}
+			else
+			{
+				damageThisRound += DAMAGE_PER_MISSED_BLOCK;
+			}
 		}
 
 		sprite.get(ImageComponent).setImage('assets/images/${name}.png');
@@ -226,34 +243,52 @@ class PlayState extends TurboState
 				damageThisRound = 0;
 			}
 
-			this.opponent.get(HealthComponent).damage(damageThisRound);
-
-			var ifDeadMessage:String = this.opponent.get(HealthComponent).currentHealth <= 0 ? '${this.opponent.getData("name")} dies!' : "";
-			this.statusText.get(TextComponent).setText('Hit for ${damageThisRound} damage! ${ifDeadMessage}');
-
-			// Spawn new monster if dead
-			if (this.opponent.get(HealthComponent).currentHealth <= 0)
+			if (currentTurn == WhoseTurn.Player)
 			{
-				this.entities.remove(this.opponent);
-				this.opponent = new Monster();
-				this.entities.push(this.opponent);
-			}
+				this.opponent.get(HealthComponent).damage(damageThisRound);
 
-			this.updateOpponentHealthText();
+				var ifDeadMessage:String = this.opponent.get(HealthComponent).currentHealth <= 0 ? '${this.opponent.getData("name")} dies!' : "";
+				this.statusText.get(TextComponent).setText('Hit for ${damageThisRound} damage! ${ifDeadMessage} Defend yourself!');
+
+				// Spawn new monster if dead
+				if (this.opponent.get(HealthComponent).currentHealth <= 0)
+				{
+					this.entities.remove(this.opponent);
+					this.opponent = new Monster();
+					this.entities.push(this.opponent);
+				}
+
+				this.updateOpponentHealthText();
+			}
+			else
+			{
+				this.player.get(HealthComponent).damage(damageThisRound);	
+				var currentHealth:Int = this.player.get(HealthComponent).currentHealth;
+				this.statusText.get(TextComponent).setText('Got hit for ${damageThisRound} damage! ATTACK!');
+				this.healthText.get(TextComponent).setText('Health: ${currentHealth}');
+
+				if (currentHealth <= 0)
+				{
+					this.entities.push(new Entity().image("assets/images/overlay.png"));
+					this.entities.push(new Entity().text("GAME OVER", 72).move(40, 450));
+				}
+			}
 
 			// score
 			damageThisRound = 0;
 			userInput = new Array<Tile>(); // no .clear method?!
 
 			// Scale difficulty. Fast.
-			if (groupSize < MAX_TILES_PER_ROW)
-			{
-				groupSize++;
-			}
-			else
-			{
-				numGroups++;
-			}
+			// if (groupSize < MAX_TILES_PER_ROW)
+			// {
+			// 	groupSize++;
+			// }
+			// else
+			// {
+			// 	numGroups++;
+			// }
+
+			currentTurn = currentTurn == WhoseTurn.Player ? WhoseTurn.Monster : WhoseTurn.Player;
 
 			// That was the last one. We're done.
 			this.generateNewPattern();
@@ -278,7 +313,6 @@ class PlayState extends TurboState
 				var tileName = '${tile}'.toLowerCase();
 				sprite.get(ImageComponent).setImage('assets/images/${tileName}.png');
 				sprite.show();
-
 				index++;
 			}
 		}
@@ -308,4 +342,10 @@ enum Tile
 	Right;
 	Down;
 	Left;
+}
+
+enum WhoseTurn
+{
+	Player;
+	Monster;
 }

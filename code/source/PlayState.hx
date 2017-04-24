@@ -5,11 +5,13 @@ import flixel.FlxG;
 import models.Monster;
 import models.Player;
 import strategy.MatchTilesStrategy;
+import strategy.NbackStreamStrategy;
 
 import turbo.Config;
 import turbo.ecs.TurboState;
 import turbo.ecs.Entity;
 import turbo.ecs.components.HealthComponent;
+import turbo.ecs.components.ImageComponent;
 import turbo.ecs.components.TextComponent;
 
 class PlayState extends TurboState
@@ -22,8 +24,9 @@ class PlayState extends TurboState
 	private var player:Player;
 	private var opponent:Monster;
 	private var currentTurn:WhoseTurn = WhoseTurn.Player;
+	private var playButton = new Entity();
 
-	private var strategy = new MatchTilesStrategy();
+	private var strategy = new MatchTilesStrategy();//NbackStreamStrategy();
 
 	public function new()
 	{
@@ -60,11 +63,24 @@ class PlayState extends TurboState
 
 		statusText = new Entity().text("Memorize and attack!", 16).move(25, 725);
 		this.entities.push(statusText);
+		
+		playButton.image("assets/images/start.png").move(250, 800).onClick(function(x, y) {
+			this.strategy.onPlayButtonClicked();
+			this.flipPlayButtonVisibility();
+		});
+
+		this.entities.push(playButton);
 	}
 
 	override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
+	}
+
+	private function flipPlayButtonVisibility():Void
+	{
+		var img = playButton.get(ImageComponent);
+		img.alpha = 1 - img.alpha;
 	}
 
 	private function updateOpponentHealthText():Void
@@ -113,6 +129,7 @@ class PlayState extends TurboState
 		}
 
 		currentTurn = currentTurn == WhoseTurn.Player ? WhoseTurn.Monster : WhoseTurn.Player;
+		this.flipPlayButtonVisibility();
 	}
 
 	private function getCurrentTurn():WhoseTurn

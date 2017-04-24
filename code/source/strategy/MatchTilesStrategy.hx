@@ -27,7 +27,6 @@ class MatchTilesStrategy
 	// UI buttons, including play, and user input
 	private var inputControls = new Array<Entity>(); // match order of ALL_TILES
 	private var userInput = new Array<Tile>();	
-	private var playButton = new Entity();
 
     private var damageThisRound:Int = 0;
     private var random = new FlxRandom();
@@ -43,7 +42,7 @@ class MatchTilesStrategy
 
     public function new() { }
 
-    public function create(entities:Array<Entity>, onRoundEnd:Int->Void, getCurrentTurn:Void->WhoseTurn):Void
+    public function create(entities:Array<Entity>, onRoundEnd:Int->Void, getCurrentTurn:Void->WhoseTurn)
     {
         DAMAGE_PER_ATTACK = Config.get("damagePerHit");
 		DAMAGE_PER_MISSED_ATTACK = Config.get("damagePerMiss");
@@ -73,20 +72,6 @@ class MatchTilesStrategy
 
 		this.generateNewPattern();
 
-        entities.push(playButton);
-
-		playButton.image("assets/images/start.png").move(250, 800).onClick(function(x, y)
-		{
-            // Blank out inputs
-			for (tile in tileSprites)
-			{
-				tile.get(ImageComponent).setImage("assets/images/blank.png");
-			}
-            
-			this.showInputControls();
-			this.showCurrentTile(0);
-		});
-
 		for (tile in ALL_TILES)
 		{
 			this.addInputControl(tile, entities);
@@ -95,24 +80,37 @@ class MatchTilesStrategy
 		this.hideInputControls();
     }
 
+	public function onPlayButtonClicked():Void
+	{
+ 		// Blank out inputs
+		for (tile in tileSprites)
+		{
+			tile.get(ImageComponent).setImage("assets/images/blank.png");
+		}
+		
+		this.showInputControls();
+		this.showCurrentTile(0);
+	}
+
     private function addInputControl(tile:Tile, entities:Array<Entity>):Void
 	{
 		var e = new Entity();
-		var pos = playButton.get(PositionComponent);
+		var posX = 250;
+		var posY = 800;
 
 		var tileName = '${tile}'.toLowerCase();
 		e.setData("tile", tile);
 		e.image('assets/images/${tileName}.png');
 		if (tile == Tile.Up || tile == Tile.Down)
 		{
-			var x = pos.x;
-			var y = pos.y - 200 + (tile == Tile.Up ?  -TILE_HEIGHT : TILE_HEIGHT);
+			var x = posX;
+			var y = posY - 200 + (tile == Tile.Up ?  -TILE_HEIGHT : TILE_HEIGHT);
 			e.move(x, y);
 		}
 		else
 		{
-			var x = pos.x + (tile == Tile.Left ? -TILE_WIDTH : TILE_WIDTH);
-			var y = pos.y - 200;
+			var x = posX + (tile == Tile.Left ? -TILE_WIDTH : TILE_WIDTH);
+			var y = posY - 200;
 			e.move(x, y);
 		}
 
@@ -147,14 +145,6 @@ class MatchTilesStrategy
 			{
 				e.hide();
 			}
-		}
-
-		// Play button is invisbile when controls are visible, and vice-versa
-		if (visible == true)
-		{
-			playButton.hide();			
-		} else {
-			playButton.show();
 		}
 	}
 

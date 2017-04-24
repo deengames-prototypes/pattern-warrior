@@ -44,9 +44,9 @@ class MatchTilesStrategy
 
     public function create(entities:Array<Entity>, onRoundEnd:Int->Void, getCurrentTurn:Void->WhoseTurn)
     {
-        DAMAGE_PER_ATTACK = Config.get("damagePerHit");
-		DAMAGE_PER_MISSED_ATTACK = Config.get("damagePerMiss");
-		DAMAGE_PER_MISSED_BLOCK = Config.get("damagePerMissedBlock");
+        DAMAGE_PER_ATTACK = Config.get("matchDamagePerHit");
+		DAMAGE_PER_MISSED_ATTACK = Config.get("matchDamagePerMiss");
+		DAMAGE_PER_MISSED_BLOCK = Config.get("matchDamagePerMissedBlock");
 
         this.onRoundEnd = onRoundEnd;
         this.getCurrentTurn = getCurrentTurn;

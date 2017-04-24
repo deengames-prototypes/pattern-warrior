@@ -26,7 +26,7 @@ class PlayState extends TurboState
 	private var currentTurn:WhoseTurn = WhoseTurn.Player;
 	private var playButton = new Entity();
 
-	private var strategy = new MatchTilesStrategy();//NbackStreamStrategy();
+	private var strategy = new NbackStreamStrategy();//MatchTilesStrategy();
 
 	public function new()
 	{

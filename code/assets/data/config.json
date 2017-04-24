@@ -1,6 +1,18 @@
-{
-    "playerHealth": 50,
-    "damagePerHit": 5,
-    "damagePerMiss": 2,
-    "damagePerMissedBlock": 5
+{    
+    "playerHealth": 50,    
+
+    // Match strategy
+    "matchDamagePerHit": 5,
+    "matchDamagePerMiss": 2,
+    "matchDamagePerMissedBlock": 5,
+
+    // N-Back Stream strategy
+    "streamDamagePerHit": 5,
+    "streamDamagePerMiss": 2,
+    "streamDamagePerMissedBlock": 5,
+    
+    "streamUniqueLettersPercent": 50, // unique letters per round (50%)
+    "streamUniqueLettersPercentGrowth": 5, // +(5%) per round
+    "streamTotalLettersCount": 10, // # of letters to answer in round one
+    "streamTotalLettersGrowth": 2  // # more letters each round
 }

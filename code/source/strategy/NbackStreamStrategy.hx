@@ -20,14 +20,19 @@ class NbackStreamStrategy
     private static var uniqueLettersPercent:Int;
 	private static var uniqueLettersPercentGrowth:Int;
 
-	private static var totalLettersCount:Int;
-	private static var totalLettersGrowth:Int;
+	private static var lettersThisRoundCount:Int;
+	private static var lettersThisRoundGrowth:Int;
 
     private var random:FlxRandom = new FlxRandom();
     private var lettersThisRound:Array<String>;
 
     private var ALL_LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K",
         "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
+
+    // UI controls
+    private var currentLetterDisplay:Entity;
+    private var isUniqueButton:Entity;
+    private var isntUniqueButton:Entity;
 
     public function new() { }
 
@@ -39,46 +44,57 @@ class NbackStreamStrategy
         
         uniqueLettersPercent = Config.get("streamUniqueLettersPercent");
 		uniqueLettersPercentGrowth = Config.get("streamUniqueLettersPercentGrowth");
-		totalLettersCount = Config.get("streamTotalLettersCount");
-		totalLettersGrowth = Config.get("streamTotalLettersGrowth");
+		lettersThisRoundCount = Config.get("streamlettersThisRoundCount");
+		lettersThisRoundGrowth = Config.get("streamlettersThisRoundGrowth");
 
         this.onRoundEnd = onRoundEnd;
         this.getCurrentTurn = getCurrentTurn;
 
         this.generateLettersForThisRound();
+
+        this.currentLetterDisplay = new Entity().text("A", 72).hide().move(250, 150);
+        this.isUniqueButton = new Entity().text("Unique").hide().move(50, 300);
+        this.isntUniqueButton = new Entity().text("Not Unique").hide().move(300, 300);
+
+        entities.push(this.currentLetterDisplay);
+        entities.push(this.isUniqueButton);
+        entities.push(this.isntUniqueButton);
     }
 
-    public function onPlayButtonClicked() {}
+    public function onPlayButtonClicked()
+    {
+        this.currentLetterDisplay.show();
+        this.isUniqueButton.show();
+        this.isntUniqueButton.show();
+    }
 
     private function generateLettersForThisRound():Void
     {
-        this.lettersThisRound = new Array<String>();
-	    var uniqueLettersCount:Int = Std.int(Math.round(totalLettersCount * uniqueLettersPercent / 100));
+	    var uniqueLettersCount:Int = Std.int(Math.round(lettersThisRoundCount * uniqueLettersPercent / 100));
 
-        // Get the total set of random letters this round
-        var totalLetters = new Array<String>();
-        while (totalLetters.length < uniqueLettersCount)
+        // Get all the unique letters for this round
+        var lettersThisRound = new Array<String>();
+        while (lettersThisRound.length < uniqueLettersCount)
         {
             var candidate = random.getObject(ALL_LETTERS);
             // new unique letter
-            if (totalLetters.indexOf(candidate) == -1)
+            if (lettersThisRound.indexOf(candidate) == -1)
             {
-                totalLetters.push(candidate);
+                lettersThisRound.push(candidate);
             }
         }
         
-        // Repeat, until full
-        while (totalLetters.length < totalLettersCount)
+        // Repeat existing letters, until full
+        while (lettersThisRound.length < lettersThisRoundCount)
         {
-            var dupe = random.getObject(totalLetters);    
-            totalLetters.push(dupe); 
+            var dupe = random.getObject(lettersThisRound);    
+            lettersThisRound.push(dupe); 
         }
 
-        this.lettersThisRound = random.shuffleArray(totalLetters, totalLetters.length * 3);
-        trace(this.lettersThisRound);
+        random.shuffle(lettersThisRound);
 
         // next round is harder
         uniqueLettersPercent += uniqueLettersPercentGrowth;
-        totalLettersCount += totalLettersGrowth;        
+        lettersThisRoundCount += lettersThisRoundGrowth;        
     }
 }

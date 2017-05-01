@@ -89,6 +89,7 @@ class PlayState extends TurboState
 		this.opponentHealthText.get(TextComponent).setText(text);
 	}
 
+	// States call this when the current round is over
 	private function onRoundEnd(damageThisRound:Int):Void
 	{
 		// no negative damage
@@ -132,6 +133,7 @@ class PlayState extends TurboState
 		this.flipPlayButtonVisibility();
 	}
 
+	// States call this when they need to know whose turn it is
 	private function getCurrentTurn():WhoseTurn
 	{
 		return this.currentTurn;

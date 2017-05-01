@@ -31,8 +31,11 @@ class NbackStreamStrategy
 
     // UI controls
     private var currentLetterDisplay:Entity;
+    private var currentLetterIndex:Int = 0;
     private var isUniqueButton:Entity;
     private var isntUniqueButton:Entity;
+    
+    private var damageThisRound:Int = 0;
 
     public function new() { }
 
@@ -44,17 +47,25 @@ class NbackStreamStrategy
         
         uniqueLettersPercent = Config.get("streamUniqueLettersPercent");
 		uniqueLettersPercentGrowth = Config.get("streamUniqueLettersPercentGrowth");
-		lettersThisRoundCount = Config.get("streamlettersThisRoundCount");
-		lettersThisRoundGrowth = Config.get("streamlettersThisRoundGrowth");
+		lettersThisRoundCount = Config.get("streamTotalLettersCount");
+		lettersThisRoundGrowth = Config.get("streamTotalLettersGrowth");
 
         this.onRoundEnd = onRoundEnd;
         this.getCurrentTurn = getCurrentTurn;
 
         this.generateLettersForThisRound();
 
-        this.currentLetterDisplay = new Entity().text("A", 72).hide().move(250, 150);
-        this.isUniqueButton = new Entity().text("Unique").hide().move(50, 300);
-        this.isntUniqueButton = new Entity().text("Not Unique").hide().move(300, 300);
+        this.currentLetterDisplay = new Entity().text("", 72).hide().move(250, 150);
+        
+        this.isUniqueButton = new Entity().text("Unique").hide().move(50, 300).onClick(function(x, y)
+        {
+          this.checkCurrentLetterUnique(true);  
+        });
+        
+        this.isntUniqueButton = new Entity().text("Not Unique").hide().move(300, 300).onClick(function(x, y)
+        {
+          this.checkCurrentLetterUnique(false);  
+        });
 
         entities.push(this.currentLetterDisplay);
         entities.push(this.isUniqueButton);
@@ -66,6 +77,14 @@ class NbackStreamStrategy
         this.currentLetterDisplay.show();
         this.isUniqueButton.show();
         this.isntUniqueButton.show();
+        this.showCurrentLetter();
+        
+        trace('Ready up: ${this.currentLetterIndex} / ${this.lettersThisRound}');
+    }
+    
+    private function showCurrentLetter():Void
+    {
+        this.currentLetterDisplay.text(this.lettersThisRound[this.currentLetterIndex]);
     }
 
     private function generateLettersForThisRound():Void
@@ -73,7 +92,7 @@ class NbackStreamStrategy
 	    var uniqueLettersCount:Int = Std.int(Math.round(lettersThisRoundCount * uniqueLettersPercent / 100));
 
         // Get all the unique letters for this round
-        var lettersThisRound = new Array<String>();
+        this.lettersThisRound = new Array<String>();
         while (lettersThisRound.length < uniqueLettersCount)
         {
             var candidate = random.getObject(ALL_LETTERS);
@@ -83,6 +102,7 @@ class NbackStreamStrategy
                 lettersThisRound.push(candidate);
             }
         }
+        trace('Uniqueness done: ${lettersThisRound}');
         
         // Repeat existing letters, until full
         while (lettersThisRound.length < lettersThisRoundCount)
@@ -92,9 +112,60 @@ class NbackStreamStrategy
         }
 
         random.shuffle(lettersThisRound);
-
-        // next round is harder
-        uniqueLettersPercent += uniqueLettersPercentGrowth;
-        lettersThisRoundCount += lettersThisRoundGrowth;        
+        trace('Shuffled: ${this.lettersThisRound}');
+    }
+    
+    private function isUnique(letter:String, atIndex:Int):Bool
+    {
+        var currentRoundString = "";
+        for (i in 0 ... atIndex + 1)
+        {
+            var letter = lettersThisRound[i];
+            currentRoundString += letter;
+        }
+    
+        // Consider the subset of letters 0..n for n = atIndex.
+        // If indexOf(n) == lastIndexOf(n), the letter is unique.
+        var toReturn = currentRoundString.indexOf(letter) == currentRoundString.lastIndexOf(letter);
+        trace('(${atIndex}) ${currentRoundString} with ${letter}: ${toReturn}');
+        return toReturn;
+    }
+    
+    private function checkCurrentLetterUnique(shouldBeUnique:Bool):Void
+    {
+        var currentLetter = this.lettersThisRound[this.currentLetterIndex];
+        if (this.isUnique(currentLetter, this.currentLetterIndex) == shouldBeUnique)
+        {
+            // TODO: whose turn is it
+            trace("RIGHT!");
+            damageThisRound += DAMAGE_PER_ATTACK;
+        } 
+        else
+        {
+            // TODO: whose utrn i si t
+            trace("WRONG!");
+            damageThisRound += DAMAGE_PER_MISSED_ATTACK;
+        }
+        
+        this.currentLetterIndex++;
+        if (this.currentLetterIndex < this.lettersThisRound.length)
+        {
+            this.showCurrentLetter();
+        }
+        else
+        {
+            trace("Round is OVER! Damage: " + this.damageThisRound);
+            // Round is OVER!
+            this.currentLetterDisplay.hide();
+            this.isUniqueButton.hide();
+            this.isntUniqueButton.hide();
+            
+            this.damageThisRound = 0;
+            
+            // next round is harder
+            uniqueLettersPercent += uniqueLettersPercentGrowth;
+            lettersThisRoundCount += lettersThisRoundGrowth;       
+            this.onRoundEnd(this.damageThisRound);
+        }
     }
 }

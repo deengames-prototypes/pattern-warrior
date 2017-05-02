@@ -18,15 +18,16 @@ class NbackStreamStrategy
     // From config.json. But Config.get(...) throws null if used here.
 	// Probably because openfl didn't load assets yet or something.
     
-	private static var DAMAGE_PER_ATTACK:Int;
-	private static var DAMAGE_PER_MISSED_ATTACK:Int;
-	private static var DAMAGE_PER_MISSED_BLOCK:Int;
+	private var DAMAGE_PER_ATTACK:Int;
+	private var DAMAGE_PER_MISSED_ATTACK:Int;
+    private var DAMAGE_PER_BLOCK:Int;
+	private var DAMAGE_PER_MISSED_BLOCK:Int;
 
-    private static var uniqueLettersPercent:Int;
-	private static var uniqueLettersPercentGrowth:Int;
+    private var uniqueLettersPercent:Int;
+	private var uniqueLettersPercentGrowth:Int;
 
-	private static var lettersThisRoundCount:Int;
-	private static var lettersThisRoundGrowth:Int;
+	private var lettersThisRoundCount:Int;
+	private var lettersThisRoundGrowth:Int;
 
     private var random:FlxRandom = new FlxRandom();
     private var lettersThisRound:Array<String>;
@@ -50,6 +51,7 @@ class NbackStreamStrategy
     {
         DAMAGE_PER_ATTACK = Config.get("streamDamagePerHit");
 		DAMAGE_PER_MISSED_ATTACK = Config.get("streamDamagePerMiss");
+        DAMAGE_PER_BLOCK = Config.get("streamDamagePerBlock");
 		DAMAGE_PER_MISSED_BLOCK = Config.get("streamDamagePerMissedBlock");
         
         uniqueLettersPercent = Config.get("streamUniqueLettersPercent");
@@ -154,7 +156,7 @@ class NbackStreamStrategy
             }
             else
             {
-                damageThisRound += 0; // total block
+                damageThisRound += DAMAGE_PER_BLOCK; // total block
             }
             this.status.text("Right").clearAfterEvents().after(0.75, function() { this.status.text(""); });
         } 
@@ -187,7 +189,7 @@ class NbackStreamStrategy
 
             this.damageThisRound = 0;
             this.currentLetterIndex = 0;
-            
+
             // next round is harder
             uniqueLettersPercent += uniqueLettersPercentGrowth;
             lettersThisRoundCount += lettersThisRoundGrowth;            

@@ -1,5 +1,7 @@
 {    
-    "playerHealth": 50,    
+    "playerHealth": 50,
+    "initialMonsterHealth": 10,
+    "perMonsterHealthIncrease": 2,
 
     // Match strategy
     "matchDamagePerHit": 5,
@@ -9,10 +11,11 @@
     // N-Back Stream strategy
     "streamDamagePerHit": 2,
     "streamDamagePerMiss": 1,
+    "streamDamagePerBlock": 1,
     "streamDamagePerMissedBlock": 5,
     
-    "streamUniqueLettersPercent": 50, // unique letters per round (50%)
-    "streamUniqueLettersPercentGrowth": 5, // +(5%) per round
+    "streamUniqueLettersPercent": 60, // unique letters per round (50%)
+    "streamUniqueLettersPercentGrowth": 0, // +(5%) per round
     "streamTotalLettersCount": 5, // # of letters to answer in round one
     "streamTotalLettersGrowth": 1  // # more letters each round
 }

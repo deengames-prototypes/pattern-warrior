@@ -13,6 +13,6 @@
     
     "streamUniqueLettersPercent": 50, // unique letters per round (50%)
     "streamUniqueLettersPercentGrowth": 5, // +(5%) per round
-    "streamTotalLettersCount": 10, // # of letters to answer in round one
-    "streamTotalLettersGrowth": 2  // # more letters each round
+    "streamTotalLettersCount": 5, // # of letters to answer in round one
+    "streamTotalLettersGrowth": 1  // # more letters each round
 }

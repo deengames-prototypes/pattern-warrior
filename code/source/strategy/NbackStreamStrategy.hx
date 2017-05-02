@@ -60,18 +60,22 @@ class NbackStreamStrategy
         this.onRoundEnd = onRoundEnd;
         this.getCurrentTurn = getCurrentTurn;
 
-        this.generateLettersForThisRound();
-
         this.currentLetterDisplay = new Entity().text("", 72).hide().move(225, 150);
         
         this.isUniqueButton = new Entity().text("Unique").hide().move(50, 200).onClick(function(x, y)
         {
-          this.checkCurrentLetterUnique(true);  
+            if (this.isUniqueButton.get(TextComponent).text.alpha > 0)
+            {
+                this.checkCurrentLetterUnique(true);  
+            }
         }, false);
         
         this.isntUniqueButton = new Entity().text("Not Unique").hide().move(300, 200).onClick(function(x, y)
         {
-          this.checkCurrentLetterUnique(false);  
+            if (this.isUniqueButton.get(TextComponent).text.alpha > 0)
+            {
+                this.checkCurrentLetterUnique(false);  
+            }
         }, false);
 
         this.status = new Entity().text("").hide().move(150, 250);
@@ -84,6 +88,7 @@ class NbackStreamStrategy
 
     public function onPlayButtonClicked()
     {
+        this.generateLettersForThisRound();        
         this.currentLetterDisplay.show();
         this.isUniqueButton.show();
         this.isntUniqueButton.show();
@@ -138,18 +143,32 @@ class NbackStreamStrategy
     
     private function checkCurrentLetterUnique(shouldBeUnique:Bool):Void
     {
+        var whoseTurn = this.getCurrentTurn();
+
         var currentLetter = this.lettersThisRound[this.currentLetterIndex];
         if (this.isUnique(currentLetter, this.currentLetterIndex) == shouldBeUnique)
         {
-            // TODO: whose turn is it
-            damageThisRound += DAMAGE_PER_ATTACK;
-            this.status.text("Right").clearAfterEvents().after(0.5, function() { this.status.text(""); });
+            if (whoseTurn == WhoseTurn.Player)
+            {
+                damageThisRound += DAMAGE_PER_ATTACK;
+            }
+            else
+            {
+                damageThisRound += 0; // total block
+            }
+            this.status.text("Right").clearAfterEvents().after(0.75, function() { this.status.text(""); });
         } 
         else
         {
-            // TODO: whose turn is it
-            this.status.text("WRONG!").clearAfterEvents().after(0.5, function() { this.status.text(""); });
-            damageThisRound += DAMAGE_PER_MISSED_ATTACK;
+            if (whoseTurn == WhoseTurn.Player)
+            {
+                damageThisRound += DAMAGE_PER_MISSED_ATTACK;                
+            }
+            else
+            {
+                damageThisRound += DAMAGE_PER_MISSED_BLOCK;
+            }
+            this.status.text("WRONG!").clearAfterEvents().after(0.75, function() { this.status.text(""); });
         }
         
         this.currentLetterIndex++;
@@ -167,6 +186,8 @@ class NbackStreamStrategy
             this.onRoundEnd(this.damageThisRound);
 
             this.damageThisRound = 0;
+            this.currentLetterIndex = 0;
+            
             // next round is harder
             uniqueLettersPercent += uniqueLettersPercentGrowth;
             lettersThisRoundCount += lettersThisRoundGrowth;            

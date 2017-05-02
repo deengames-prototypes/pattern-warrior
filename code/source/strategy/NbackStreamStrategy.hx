@@ -1,8 +1,13 @@
 package strategy;
 
 import flixel.math.FlxRandom;
+import flixel.util.FlxColor;
+
 import turbo.Config;
+import turbo.ecs.components.TextComponent;
 import turbo.ecs.Entity;
+
+
 import PlayState; // whoseturn
 
 class NbackStreamStrategy
@@ -57,17 +62,17 @@ class NbackStreamStrategy
 
         this.generateLettersForThisRound();
 
-        this.currentLetterDisplay = new Entity().text("", 72).hide().move(250, 150);
+        this.currentLetterDisplay = new Entity().text("", 72).hide().move(225, 150);
         
         this.isUniqueButton = new Entity().text("Unique").hide().move(50, 200).onClick(function(x, y)
         {
           this.checkCurrentLetterUnique(true);  
-        });
+        }, false);
         
         this.isntUniqueButton = new Entity().text("Not Unique").hide().move(300, 200).onClick(function(x, y)
         {
           this.checkCurrentLetterUnique(false);  
-        });
+        }, false);
 
         this.status = new Entity().text("").hide().move(150, 250);
 
@@ -83,8 +88,6 @@ class NbackStreamStrategy
         this.isUniqueButton.show();
         this.isntUniqueButton.show();
         this.showCurrentLetter();
-        
-        trace('Ready up: ${this.currentLetterIndex} / ${this.lettersThisRound}');
     }
     
     private function showCurrentLetter():Void
@@ -107,7 +110,6 @@ class NbackStreamStrategy
                 lettersThisRound.push(candidate);
             }
         }
-        trace('Uniqueness done: ${lettersThisRound}');
         
         // Repeat existing letters, until full
         while (lettersThisRound.length < lettersThisRoundCount)
@@ -117,7 +119,6 @@ class NbackStreamStrategy
         }
 
         random.shuffle(lettersThisRound);
-        trace('Shuffled: ${this.lettersThisRound}');
     }
     
     private function isUnique(letter:String, atIndex:Int):Bool
@@ -132,7 +133,6 @@ class NbackStreamStrategy
         // Consider the subset of letters 0..n for n = atIndex.
         // If indexOf(n) == lastIndexOf(n), the letter is unique.
         var toReturn = currentRoundString.indexOf(letter) == currentRoundString.lastIndexOf(letter);
-        trace('(${atIndex}) ${currentRoundString} with ${letter}: ${toReturn}');
         return toReturn;
     }
     
@@ -143,12 +143,12 @@ class NbackStreamStrategy
         {
             // TODO: whose turn is it
             damageThisRound += DAMAGE_PER_ATTACK;
-            this.status.text("Right");
+            this.status.text("Right").clearAfterEvents().after(0.5, function() { this.status.text(""); });
         } 
         else
         {
             // TODO: whose turn is it
-            this.status.text("WRONG!");
+            this.status.text("WRONG!").clearAfterEvents().after(0.5, function() { this.status.text(""); });
             damageThisRound += DAMAGE_PER_MISSED_ATTACK;
         }
         
@@ -159,18 +159,17 @@ class NbackStreamStrategy
         }
         else
         {
-            trace("Round is OVER! Damage: " + this.damageThisRound);
             // Round is OVER!
             this.currentLetterDisplay.hide();
             this.isUniqueButton.hide();
             this.isntUniqueButton.hide();
-            
+                        
+            this.onRoundEnd(this.damageThisRound);
+
             this.damageThisRound = 0;
-            
             // next round is harder
             uniqueLettersPercent += uniqueLettersPercentGrowth;
-            lettersThisRoundCount += lettersThisRoundGrowth;       
-            this.onRoundEnd(this.damageThisRound);
+            lettersThisRoundCount += lettersThisRoundGrowth;            
         }
     }
 }

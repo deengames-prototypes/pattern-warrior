@@ -7,8 +7,8 @@
     "matchDamagePerMissedBlock": 5,
 
     // N-Back Stream strategy
-    "streamDamagePerHit": 5,
-    "streamDamagePerMiss": 2,
+    "streamDamagePerHit": 2,
+    "streamDamagePerMiss": 1,
     "streamDamagePerMissedBlock": 5,
     
     "streamUniqueLettersPercent": 50, // unique letters per round (50%)

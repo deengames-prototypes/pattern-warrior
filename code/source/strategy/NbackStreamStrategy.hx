@@ -29,11 +29,13 @@ class NbackStreamStrategy
     private var ALL_LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K",
         "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
 
+    private var currentLetterIndex:Int = 0;
+
     // UI controls
     private var currentLetterDisplay:Entity;
-    private var currentLetterIndex:Int = 0;
     private var isUniqueButton:Entity;
     private var isntUniqueButton:Entity;
+    private var status:Entity;
     
     private var damageThisRound:Int = 0;
 
@@ -57,19 +59,22 @@ class NbackStreamStrategy
 
         this.currentLetterDisplay = new Entity().text("", 72).hide().move(250, 150);
         
-        this.isUniqueButton = new Entity().text("Unique").hide().move(50, 300).onClick(function(x, y)
+        this.isUniqueButton = new Entity().text("Unique").hide().move(50, 200).onClick(function(x, y)
         {
           this.checkCurrentLetterUnique(true);  
         });
         
-        this.isntUniqueButton = new Entity().text("Not Unique").hide().move(300, 300).onClick(function(x, y)
+        this.isntUniqueButton = new Entity().text("Not Unique").hide().move(300, 200).onClick(function(x, y)
         {
           this.checkCurrentLetterUnique(false);  
         });
 
+        this.status = new Entity().text("").hide().move(150, 250);
+
         entities.push(this.currentLetterDisplay);
         entities.push(this.isUniqueButton);
         entities.push(this.isntUniqueButton);
+        entities.push(this.status);
     }
 
     public function onPlayButtonClicked()
@@ -137,13 +142,13 @@ class NbackStreamStrategy
         if (this.isUnique(currentLetter, this.currentLetterIndex) == shouldBeUnique)
         {
             // TODO: whose turn is it
-            trace("RIGHT!");
             damageThisRound += DAMAGE_PER_ATTACK;
+            this.status.text("Right");
         } 
         else
         {
-            // TODO: whose utrn i si t
-            trace("WRONG!");
+            // TODO: whose turn is it
+            this.status.text("WRONG!");
             damageThisRound += DAMAGE_PER_MISSED_ATTACK;
         }
         

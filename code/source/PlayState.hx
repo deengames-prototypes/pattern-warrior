@@ -6,6 +6,7 @@ import models.Monster;
 import models.Player;
 import strategy.MatchTilesStrategy;
 import strategy.NbackStreamStrategy;
+import strategy.MultipleChoiceNbackStreamStrategy;
 
 import turbo.Config;
 import turbo.ecs.TurboState;
@@ -26,7 +27,7 @@ class PlayState extends TurboState
 	private var currentTurn:WhoseTurn = WhoseTurn.Player;
 	private var playButton = new Entity();
 
-	private var strategy = new NbackStreamStrategy();
+	private var strategy = new MultipleChoiceNbackStreamStrategy();
 
 	public function new()
 	{
@@ -45,7 +46,7 @@ class PlayState extends TurboState
 		// Text that shows health
 		healthText = new Entity()
 			.text('Health: ${this.player.get(HealthComponent).currentHealth}', 24)
-			.move(400, 32);
+			.move(200, 32);
 
 		this.entities.push(healthText);
 		
@@ -64,7 +65,7 @@ class PlayState extends TurboState
 		statusText = new Entity().text("Memorize and attack!", 16).move(25, 725);
 		this.entities.push(statusText);
 		
-		playButton.image("assets/images/start.png").move(250, 800).onClick(function(x, y) {
+		playButton.image("assets/images/start.png").move(150, 550).onClick(function(x, y) {
 			this.strategy.onPlayButtonClicked();
 			this.flipPlayButtonVisibility();
 		});

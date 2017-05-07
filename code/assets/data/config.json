@@ -8,14 +8,16 @@
     "matchDamagePerMiss": 2,
     "matchDamagePerMissedBlock": 5,
 
-    // N-Back Stream strategy
+    // N-Back strategies
     "streamDamagePerHit": 2,
     "streamDamagePerMiss": 1,
     "streamDamagePerBlock": 1,
-    "streamDamagePerMissedBlock": 5,
-    
+    "streamDamagePerMissedBlock": 5,        
     "streamUniqueLettersPercent": 60, // unique letters per round (50%)
     "streamUniqueLettersPercentGrowth": 0, // +(5%) per round
     "streamTotalLettersCount": 5, // # of letters to answer in round one
-    "streamTotalLettersGrowth": 1  // # more letters each round
+    "streamTotalLettersGrowth": 1,  // # more letters each round
+
+    // N-back multiple
+    "nbackLettersPerTurn": 4
 }

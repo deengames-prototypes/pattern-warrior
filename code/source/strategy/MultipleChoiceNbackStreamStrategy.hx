@@ -22,14 +22,22 @@ class MultipleChoiceNbackStreamStrategy
 	private var DAMAGE_PER_MISSED_ATTACK:Int;
     private var DAMAGE_PER_BLOCK:Int;
 	private var DAMAGE_PER_MISSED_BLOCK:Int;
+    private var LETTERS_PER_TURN:Int;
 
     private var uniqueLettersPercent:Int;
 	private var uniqueLettersPercentGrowth:Int;
 
-	private var lettersThisRoundCount:Int;
-	private var lettersThisRoundGrowth:Int;
+    // Turn: every time you pick one letter out of four.
+    // Round: a set of 5 turns that aggregate damage.
+	private var turnsCount:Int;
+	private var turnsGrowthPerRound:Int;
 
     private var random:FlxRandom = new FlxRandom();
+    
+    // A mixture of unique and non-unique letters. If we show four letters per
+    // round, we guarantee that at least every 4th letter is unique. (We do this
+    // by generating four letters at a time, one unique, shuffling, and concatenating
+    // that quartet to the list.)
     private var lettersThisRound:Array<String>;
 
     private var ALL_LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K",
@@ -56,8 +64,10 @@ class MultipleChoiceNbackStreamStrategy
         
         uniqueLettersPercent = Config.get("streamUniqueLettersPercent");
 		uniqueLettersPercentGrowth = Config.get("streamUniqueLettersPercentGrowth");
-		lettersThisRoundCount = Config.get("streamTotalLettersCount");
-		lettersThisRoundGrowth = Config.get("streamTotalLettersGrowth");
+		turnsCount = Config.get("streamTotalLettersCount");
+		turnsGrowthPerRound = Config.get("streamTotalLettersGrowth");
+
+        LETTERS_PER_TURN = Config.get("nbackLettersPerTurn");
 
         this.onRoundEnd = onRoundEnd;
         this.getCurrentTurn = getCurrentTurn;
@@ -104,28 +114,66 @@ class MultipleChoiceNbackStreamStrategy
 
     private function generateLettersForThisRound():Void
     {
-	    var uniqueLettersCount:Int = Std.int(Math.round(lettersThisRoundCount * uniqueLettersPercent / 100));
+        // 5 turns, 4 letters shown per turn => generate 20 letters
+	    var totalLettersCount:Int = turnsCount * LETTERS_PER_TURN;
+        // 20 letters, 60% unique => generate 12 unique letters
+        var uniqueLettersCount:Int = Std.int(Math.round(totalLettersCount * uniqueLettersPercent / 100));
 
         // Get all the unique letters for this round
-        this.lettersThisRound = new Array<String>();
-        while (lettersThisRound.length < uniqueLettersCount)
+        var uniqueLetters = new Array<String>();
+        while (uniqueLetters.length < uniqueLettersCount)
         {
             var candidate = random.getObject(ALL_LETTERS);
             // new unique letter
-            if (lettersThisRound.indexOf(candidate) == -1)
+            if (uniqueLetters.indexOf(candidate) == -1)
             {
-                lettersThisRound.push(candidate);
+                uniqueLetters.push(candidate);
             }
         }
-        
+        trace('unique: ${uniqueLetters}');
+
+        var nonUniqueLetters = new Array<String>();
         // Repeat existing letters, until full
-        while (lettersThisRound.length < lettersThisRoundCount)
+        while (nonUniqueLetters.length < totalLettersCount - uniqueLettersCount)
         {
-            var dupe = random.getObject(lettersThisRound);    
-            lettersThisRound.push(dupe); 
+            var dupe = random.getObject(uniqueLetters);    
+            nonUniqueLetters.push(dupe); 
+        }
+        trace('non-unique: ${nonUniqueLetters}');
+
+        // Pick one unique letter per round, guaranteeing each round has one unique letter.
+        // Then, jumble up the leftovers (unique and non-unique) and disperse it to all the rounds.
+        // We could, say, weight more unique letters early on vs. later, but whatever.
+        var lettersForEachTurn = new Array<Array<String>>();
+        for (letter in 0...turnsCount)
+        {
+            var a = new Array<String>();
+            var unique = uniqueLetters.pop();
+            a.push(unique);            
+            lettersForEachTurn.push(a);
         }
 
-        random.shuffle(lettersThisRound);
+        // Combine unique and non-unique letters and fill each round's quota
+        while (uniqueLetters.length > 0)
+        {
+            var next = uniqueLetters.pop();
+            nonUniqueLetters.push(next);
+        }
+
+        random.shuffle(nonUniqueLetters);
+
+        for (turn in lettersForEachTurn)
+        {
+            while (turn.length < LETTERS_PER_TURN)
+            {
+                // already randomized
+                var next = nonUniqueLetters.pop();
+                turn.push(next);
+            }
+        }
+
+        // We should be done
+        trace(lettersForEachTurn);
     }
     
     private function isUnique(letter:String, atIndex:Int):Bool
@@ -192,7 +240,7 @@ class MultipleChoiceNbackStreamStrategy
 
             // next round is harder
             uniqueLettersPercent += uniqueLettersPercentGrowth;
-            lettersThisRoundCount += lettersThisRoundGrowth;            
+            turnsCount += turnsGrowthPerRound;            
         }
     }
 }

@@ -19,5 +19,6 @@
     "streamTotalLettersGrowth": 1,  // # more letters each round
 
     // N-back multiple
-    "nbackLettersPerTurn": 4
+    "multiNbackLettersPerTurn": 4,
+    "multiNbackUniqueLettersPercent": 50
 }

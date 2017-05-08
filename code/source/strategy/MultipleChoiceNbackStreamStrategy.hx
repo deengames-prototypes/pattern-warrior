@@ -34,16 +34,11 @@ class MultipleChoiceNbackStreamStrategy
 
     private var random:FlxRandom = new FlxRandom();
     
-    // A mixture of unique and non-unique letters. If we show four letters per
-    // round, we guarantee that at least every 4th letter is unique. (We do this
-    // by generating four letters at a time, one unique, shuffling, and concatenating
-    // that quartet to the list.)
-    private var lettersThisRound:Array<String>;
-
     private var ALL_LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K",
         "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
 
-    private var currentLetterIndex:Int = 0;
+    private var lettersPickedThisRound = ['S', 'A'];//new Array<String>();
+    private var currentTurnLetters = new Array<String>();
 
     // UI controls
     private var currentLetterDisplay:Entity;
@@ -62,12 +57,11 @@ class MultipleChoiceNbackStreamStrategy
         DAMAGE_PER_BLOCK = Config.get("streamDamagePerBlock");
 		DAMAGE_PER_MISSED_BLOCK = Config.get("streamDamagePerMissedBlock");
         
-        uniqueLettersPercent = Config.get("streamUniqueLettersPercent");
-		uniqueLettersPercentGrowth = Config.get("streamUniqueLettersPercentGrowth");
+        uniqueLettersPercent = Config.get("multiNbackUniqueLettersPercent");		
 		turnsCount = Config.get("streamTotalLettersCount");
 		turnsGrowthPerRound = Config.get("streamTotalLettersGrowth");
 
-        LETTERS_PER_TURN = Config.get("nbackLettersPerTurn");
+        LETTERS_PER_TURN = Config.get("multiNbackLettersPerTurn");
 
         this.onRoundEnd = onRoundEnd;
         this.getCurrentTurn = getCurrentTurn;
@@ -78,7 +72,7 @@ class MultipleChoiceNbackStreamStrategy
         {
             if (this.isUniqueButton.get(TextComponent).text.alpha > 0)
             {
-                this.checkCurrentLetterUnique(true);  
+                this.checkChoiceForDamage(true);  
             }
         }, false);
         
@@ -86,7 +80,7 @@ class MultipleChoiceNbackStreamStrategy
         {
             if (this.isUniqueButton.get(TextComponent).text.alpha > 0)
             {
-                this.checkCurrentLetterUnique(false);  
+                this.checkChoiceForDamage(false);  
             }
         }, false);
 
@@ -100,99 +94,73 @@ class MultipleChoiceNbackStreamStrategy
 
     public function onPlayButtonClicked()
     {
-        this.generateLettersForThisRound();        
+        this.generateLettersForThisTurn();        
         this.currentLetterDisplay.show();
         this.isUniqueButton.show();
         this.isntUniqueButton.show();
-        this.showCurrentLetter();
     }
     
-    private function showCurrentLetter():Void
+    private function generateLettersForThisTurn():Void
     {
-        this.currentLetterDisplay.text(this.lettersThisRound[this.currentLetterIndex]);
-    }
+        this.currentTurnLetters = new Array<String>();
 
-    private function generateLettersForThisRound():Void
-    {
-        // 5 turns, 4 letters shown per turn => generate 20 letters
-	    var totalLettersCount:Int = turnsCount * LETTERS_PER_TURN;
-        // 20 letters, 60% unique => generate 12 unique letters
-        var uniqueLettersCount:Int = Std.int(Math.round(totalLettersCount * uniqueLettersPercent / 100));
-
-        // Get all the unique letters for this round
-        var uniqueLetters = new Array<String>();
-        while (uniqueLetters.length < uniqueLettersCount)
+        if (this.lettersPickedThisRound.length == 0)
         {
-            var candidate = random.getObject(ALL_LETTERS);
-            // new unique letter
-            if (uniqueLetters.indexOf(candidate) == -1)
+            // special case: everything is unique
+            while (this.currentTurnLetters.length < LETTERS_PER_TURN)
             {
-                uniqueLetters.push(candidate);
+                this.currentTurnLetters.push(this.random.getObject(ALL_LETTERS));
             }
         }
-        trace('unique: ${uniqueLetters}');
-
-        var nonUniqueLetters = new Array<String>();
-        // Repeat existing letters, until full
-        while (nonUniqueLetters.length < totalLettersCount - uniqueLettersCount)
+        else
         {
-            var dupe = random.getObject(uniqueLetters);    
-            nonUniqueLetters.push(dupe); 
-        }
-        trace('non-unique: ${nonUniqueLetters}');
+            // Guarantee at least one unique letter
+            var uniqueCount = Std.int(Math.round(uniqueLettersPercent * LETTERS_PER_TURN / 100));
+            
+            var nonUniqueCount = LETTERS_PER_TURN - uniqueCount;
+            
+            while (uniqueCount-- > 0)
+            {                
+                this.currentTurnLetters.push(this.getUniqueLetter());
+            }            
 
-        // Pick one unique letter per round, guaranteeing each round has one unique letter.
-        // Then, jumble up the leftovers (unique and non-unique) and disperse it to all the rounds.
-        // We could, say, weight more unique letters early on vs. later, but whatever.
-        var lettersForEachTurn = new Array<Array<String>>();
-        for (letter in 0...turnsCount)
-        {
-            var a = new Array<String>();
-            var unique = uniqueLetters.pop();
-            a.push(unique);            
-            lettersForEachTurn.push(a);
-        }
-
-        // Combine unique and non-unique letters and fill each round's quota
-        while (uniqueLetters.length > 0)
-        {
-            var next = uniqueLetters.pop();
-            nonUniqueLetters.push(next);
-        }
-
-        random.shuffle(nonUniqueLetters);
-
-        for (turn in lettersForEachTurn)
-        {
-            while (turn.length < LETTERS_PER_TURN)
+            while (nonUniqueCount-- > 0)
             {
-                // already randomized
-                var next = nonUniqueLetters.pop();
-                turn.push(next);
+                this.currentTurnLetters.push(this.getNonUniqueLetter());
             }
-        }
 
-        // We should be done
-        trace(lettersForEachTurn);
-    }
-    
-    private function isUnique(letter:String, atIndex:Int):Bool
-    {
-        var currentRoundString = "";
-        for (i in 0 ... atIndex + 1)
-        {
-            var letter = lettersThisRound[i];
-            currentRoundString += letter;
+            random.shuffle(this.currentTurnLetters);
         }
-    
-        // Consider the subset of letters 0..n for n = atIndex.
-        // If indexOf(n) == lastIndexOf(n), the letter is unique.
-        var toReturn = currentRoundString.indexOf(letter) == currentRoundString.lastIndexOf(letter);
+    }
+
+    private function getUniqueLetter():String
+    {
+        var toReturn = random.getObject(ALL_LETTERS);
+        while (this.lettersPickedThisRound.indexOf(toReturn) > -1)
+        {
+            toReturn = random.getObject(ALL_LETTERS);
+        }
+        trace('unique: ${toReturn}');
         return toReturn;
     }
-    
-    private function checkCurrentLetterUnique(shouldBeUnique:Bool):Void
+
+    private function getNonUniqueLetter():String
     {
+        if (this.lettersPickedThisRound.length == 0)
+        {
+            // There's no such thing as non-unique.
+            trace('non-unique: anything');
+            return random.getObject(ALL_LETTERS);
+        }
+
+        var toReturn = random.getObject(this.lettersPickedThisRound);
+        trace('non-unique: ${toReturn}');
+        return toReturn;
+    }
+        
+    private function checkChoiceForDamage(shouldBeUnique:Bool):Void
+    {
+        /*
         var whoseTurn = this.getCurrentTurn();
 
         var currentLetter = this.lettersThisRound[this.currentLetterIndex];
@@ -224,7 +192,7 @@ class MultipleChoiceNbackStreamStrategy
         this.currentLetterIndex++;
         if (this.currentLetterIndex < this.lettersThisRound.length)
         {
-            this.showCurrentLetter();
+            this.generateLettersForThisTurn();
         }
         else
         {
@@ -239,8 +207,8 @@ class MultipleChoiceNbackStreamStrategy
             this.currentLetterIndex = 0;
 
             // next round is harder
-            uniqueLettersPercent += uniqueLettersPercentGrowth;
             turnsCount += turnsGrowthPerRound;            
         }
+        */
     }
 }

@@ -37,13 +37,13 @@ class MultipleChoiceNbackStreamStrategy
     private var ALL_LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K",
         "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
 
-    private var lettersPickedThisRound = ['S', 'A'];//new Array<String>();
+    // Letters picked by the PLAYER this round!
+    private var lettersPickedThisRound = new Array<String>();
+    // Letters for this turn, like right now
     private var currentTurnLetters = new Array<String>();
 
     // UI controls
-    private var currentLetterDisplay:Entity;
-    private var isUniqueButton:Entity;
-    private var isntUniqueButton:Entity;
+    private var currentLetterDisplay:Array<Entity>;
     private var status:Entity;
     
     private var damageThisRound:Int = 0;
@@ -66,38 +66,39 @@ class MultipleChoiceNbackStreamStrategy
         this.onRoundEnd = onRoundEnd;
         this.getCurrentTurn = getCurrentTurn;
 
-        this.currentLetterDisplay = new Entity().text("", 72).hide().move(200, 150);
+        this.currentLetterDisplay = new Array<Entity>();
+        this.currentLetterDisplay.push(new Entity().text("", 72).hide().move(200, 100));
+        this.currentLetterDisplay.push(new Entity().text("", 72).hide().move(250, 100));
+        this.currentLetterDisplay.push(new Entity().text("", 72).hide().move(200, 150));
+        this.currentLetterDisplay.push(new Entity().text("", 72).hide().move(250, 150));
         
-        this.isUniqueButton = new Entity().text("Unique").hide().move(8, 200).onClick(function(x, y)
-        {
-            if (this.isUniqueButton.get(TextComponent).text.alpha > 0)
-            {
-                this.checkChoiceForDamage(true);  
-            }
-        }, false);
-        
-        this.isntUniqueButton = new Entity().text("Not Unique").hide().move(216, 200).onClick(function(x, y)
-        {
-            if (this.isUniqueButton.get(TextComponent).text.alpha > 0)
-            {
-                this.checkChoiceForDamage(false);  
-            }
-        }, false);
-
         this.status = new Entity().text("").hide().move(150, 275);
 
-        entities.push(this.currentLetterDisplay);
-        entities.push(this.isUniqueButton);
-        entities.push(this.isntUniqueButton);
+        for (ui in this.currentLetterDisplay)
+        {
+            entities.push(ui);
+        }
         entities.push(this.status);
     }
 
     public function onPlayButtonClicked()
     {
         this.generateLettersForThisTurn();        
-        this.currentLetterDisplay.show();
-        this.isUniqueButton.show();
-        this.isntUniqueButton.show();
+        for (ui in this.currentLetterDisplay)
+        {
+            ui.show();
+        }
+        this.showCurrentTurn();
+    }
+
+    private function showCurrentTurn():Void
+    {
+        for (i in 0 ... this.LETTERS_PER_TURN)
+        {
+            var ui = this.currentLetterDisplay[i];
+            ui.text(this.currentTurnLetters[i]);
+            trace('${i} => ${this.currentTurnLetters[i]}');
+        }
     }
     
     private function generateLettersForThisTurn():Void
@@ -106,7 +107,7 @@ class MultipleChoiceNbackStreamStrategy
 
         if (this.lettersPickedThisRound.length == 0)
         {
-            // special case: everything is unique
+            // special case: everything is unique (nothing done yet)
             while (this.currentTurnLetters.length < LETTERS_PER_TURN)
             {
                 this.currentTurnLetters.push(this.random.getObject(ALL_LETTERS));
@@ -197,9 +198,10 @@ class MultipleChoiceNbackStreamStrategy
         else
         {
             // Round is OVER!
-            this.currentLetterDisplay.hide();
-            this.isUniqueButton.hide();
-            this.isntUniqueButton.hide();
+            for (ui in this.currentLetterDisplay)
+            {
+                ui.hide();
+            }
                         
             this.onRoundEnd(this.damageThisRound);
 

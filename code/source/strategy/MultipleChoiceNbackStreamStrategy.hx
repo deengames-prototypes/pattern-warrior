@@ -67,12 +67,20 @@ class MultipleChoiceNbackStreamStrategy
         this.getCurrentTurn = getCurrentTurn;
 
         this.currentLetterDisplay = new Array<Entity>();
-        this.currentLetterDisplay.push(new Entity().text("", 72).hide().move(200, 100));
-        this.currentLetterDisplay.push(new Entity().text("", 72).hide().move(250, 100));
-        this.currentLetterDisplay.push(new Entity().text("", 72).hide().move(200, 150));
-        this.currentLetterDisplay.push(new Entity().text("", 72).hide().move(250, 150));
-        
-        this.status = new Entity().text("").hide().move(150, 275);
+        for (i in 0 ... LETTERS_PER_TURN)
+        {
+            var x = 200 + (i % 2 == 1 ? 50 : 0);
+            var y = 100 + Std.int(i / 2) * 50;
+            // needs text to handle clicks...
+            var e = new Entity().text("??", 72).hide().move(x, y);
+            e.onClick(function(a, b)
+            {
+                this.checkChoiceForDamage(i);
+            }, false);
+            this.currentLetterDisplay.push(e);
+        }
+
+        this.status = new Entity().text("").hide().move(25, 32);
 
         for (ui in this.currentLetterDisplay)
         {
@@ -84,10 +92,6 @@ class MultipleChoiceNbackStreamStrategy
     public function onPlayButtonClicked()
     {
         this.generateLettersForThisTurn();        
-        for (ui in this.currentLetterDisplay)
-        {
-            ui.show();
-        }
         this.showCurrentTurn();
     }
 
@@ -96,8 +100,8 @@ class MultipleChoiceNbackStreamStrategy
         for (i in 0 ... this.LETTERS_PER_TURN)
         {
             var ui = this.currentLetterDisplay[i];
+            ui.show();
             ui.text(this.currentTurnLetters[i]);
-            trace('${i} => ${this.currentTurnLetters[i]}');
         }
     }
     
@@ -116,8 +120,7 @@ class MultipleChoiceNbackStreamStrategy
         else
         {
             // Guarantee at least one unique letter
-            var uniqueCount = Std.int(Math.round(uniqueLettersPercent * LETTERS_PER_TURN / 100));
-            
+            var uniqueCount = Std.int(Math.round(uniqueLettersPercent * LETTERS_PER_TURN / 100));            
             var nonUniqueCount = LETTERS_PER_TURN - uniqueCount;
             
             while (uniqueCount-- > 0)
@@ -141,7 +144,6 @@ class MultipleChoiceNbackStreamStrategy
         {
             toReturn = random.getObject(ALL_LETTERS);
         }
-        trace('unique: ${toReturn}');
         return toReturn;
     }
 
@@ -150,22 +152,24 @@ class MultipleChoiceNbackStreamStrategy
         if (this.lettersPickedThisRound.length == 0)
         {
             // There's no such thing as non-unique.
-            trace('non-unique: anything');
             return random.getObject(ALL_LETTERS);
         }
 
         var toReturn = random.getObject(this.lettersPickedThisRound);
-        trace('non-unique: ${toReturn}');
         return toReturn;
     }
-        
-    private function checkChoiceForDamage(shouldBeUnique:Bool):Void
+
+    private function isUnique(letter:String):Bool
     {
-        /*
+        return this.lettersPickedThisRound.indexOf(letter) == -1;
+    }
+        
+    private function checkChoiceForDamage(index:Int):Void
+    {
+        var letter = this.currentTurnLetters[index];
         var whoseTurn = this.getCurrentTurn();
 
-        var currentLetter = this.lettersThisRound[this.currentLetterIndex];
-        if (this.isUnique(currentLetter, this.currentLetterIndex) == shouldBeUnique)
+        if (this.isUnique(letter))
         {
             if (whoseTurn == WhoseTurn.Player)
             {
@@ -176,7 +180,7 @@ class MultipleChoiceNbackStreamStrategy
                 damageThisRound += DAMAGE_PER_BLOCK; // total block
             }
             this.status.text("Right").clearAfterEvents().after(0.75, function() { this.status.text(""); });
-        } 
+        }
         else
         {
             if (whoseTurn == WhoseTurn.Player)
@@ -189,11 +193,13 @@ class MultipleChoiceNbackStreamStrategy
             }
             this.status.text("WRONG!").clearAfterEvents().after(0.75, function() { this.status.text(""); });
         }
+
+        this.lettersPickedThisRound.push(letter);
         
-        this.currentLetterIndex++;
-        if (this.currentLetterIndex < this.lettersThisRound.length)
+        if (this.lettersPickedThisRound.length < this.turnsCount)
         {
             this.generateLettersForThisTurn();
+            this.showCurrentTurn();
         }
         else
         {
@@ -206,11 +212,10 @@ class MultipleChoiceNbackStreamStrategy
             this.onRoundEnd(this.damageThisRound);
 
             this.damageThisRound = 0;
-            this.currentLetterIndex = 0;
+            this.lettersPickedThisRound = new Array<String>();
 
             // next round is harder
             turnsCount += turnsGrowthPerRound;            
         }
-        */
     }
 }

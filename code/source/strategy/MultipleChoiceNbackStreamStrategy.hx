@@ -23,6 +23,7 @@ class MultipleChoiceNbackStreamStrategy
     private var DAMAGE_PER_BLOCK:Int;
 	private var DAMAGE_PER_MISSED_BLOCK:Int;
     private var LETTERS_PER_TURN:Int;
+    private var LETTER_POSITIONS = [[250, 100], [200, 150], [300, 150], [250, 200]];
 
     private var uniqueLettersPercent:Int;
 	private var uniqueLettersPercentGrowth:Int;
@@ -69,8 +70,8 @@ class MultipleChoiceNbackStreamStrategy
         this.currentLetterDisplay = new Array<Entity>();
         for (i in 0 ... LETTERS_PER_TURN)
         {
-            var x = 200 + (i % 2 == 1 ? 50 : 0);
-            var y = 100 + Std.int(i / 2) * 50;
+            var x = LETTER_POSITIONS[i][0];
+            var y = LETTER_POSITIONS[i][1];
             // needs text to handle clicks...
             var e = new Entity().text("??", 72).hide().move(x, y);
             e.onClick(function(a, b)

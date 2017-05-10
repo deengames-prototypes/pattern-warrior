@@ -25,7 +25,10 @@ class PlayState extends TurboState
 	private var player:Player;
 	private var opponent:Monster;
 	private var currentTurn:WhoseTurn = WhoseTurn.Player;
-	private var playButton = new Entity();
+
+	private var fightButton = new Entity();
+	private var healButtons = new Array<Entity>();
+	// private var specialButton = new Entity();
 
 	private var strategy = new MultipleChoiceNbackStreamStrategy();
 
@@ -52,25 +55,36 @@ class PlayState extends TurboState
 		
 		this.opponent = new Monster();
 		this.entities.push(this.opponent);
-		opponent.move(32, 400 + 16 + 24);
+		opponent.move(32, 300 + 16 + 24);
 		opponent.size(64, 64);
 
 		opponentHealthText = new Entity()
 			.text("Placeholder!", 24)
-			.move(32, 400);
+			.move(32, 300);
 			
 		this.entities.push(opponentHealthText);
 		this.updateOpponentHealthText();		
 
-		statusText = new Entity().text("Memorize and attack!", 16).move(25, 725);
+		statusText = new Entity().text("Memorize and attack!", 16).move(25, 700);
 		this.entities.push(statusText);
 		
-		playButton.image("assets/images/start.png").move(150, 550).onClick(function(x, y) {
-			this.strategy.onPlayButtonClicked();
-			this.flipPlayButtonVisibility();
+		fightButton.image("assets/images/fight.png").move(150, 550).onClick(function(x, y) {
+			this.strategy.onFightButtonClicked();
+			this.flipfightButtonVisibility();
 		});
 
-		this.entities.push(playButton);
+		this.entities.push(fightButton);
+
+		for (i in 0 ... 3)
+		{
+			var healButton = new Entity().image("assets/images/heal.png")
+				.move(25, 450 + (i * 70)).onClick(function(x, y) {
+					trace("HEAL!!!!");
+				});
+
+			this.healButtons.push(healButton);
+			this.entities.push(healButton);
+		}
 	}
 
 	override public function update(elapsed:Float):Void
@@ -78,9 +92,9 @@ class PlayState extends TurboState
 		super.update(elapsed);
 	}
 
-	private function flipPlayButtonVisibility():Void
+	private function flipfightButtonVisibility():Void
 	{
-		var img = playButton.get(ImageComponent);
+		var img = fightButton.get(ImageComponent);
 		img.alpha = 1 - img.alpha;
 	}
 
@@ -131,7 +145,7 @@ class PlayState extends TurboState
 		}
 
 		currentTurn = currentTurn == WhoseTurn.Player ? WhoseTurn.Monster : WhoseTurn.Player;
-		this.flipPlayButtonVisibility();
+		this.flipfightButtonVisibility();
 	}
 
 	// States call this when they need to know whose turn it is

@@ -23,7 +23,7 @@ class MultipleChoiceNbackStreamStrategy
     private var DAMAGE_PER_BLOCK:Int;
 	private var DAMAGE_PER_MISSED_BLOCK:Int;
     private var LETTERS_PER_TURN:Int;
-    private var LETTER_POSITIONS = [[250, 100], [200, 150], [300, 150], [250, 200]];
+    private var LETTER_POSITIONS = [[200, 100], [150, 150], [250, 150], [200, 200]];
 
     private var uniqueLettersPercent:Int;
 	private var uniqueLettersPercentGrowth:Int;
@@ -90,7 +90,7 @@ class MultipleChoiceNbackStreamStrategy
         entities.push(this.status);
     }
 
-    public function onPlayButtonClicked()
+    public function onFightButtonClicked()
     {
         this.generateLettersForThisTurn();        
         this.showCurrentTurn();

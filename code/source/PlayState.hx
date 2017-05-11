@@ -27,7 +27,7 @@ class PlayState extends TurboState
 	private var currentTurn:WhoseTurn = WhoseTurn.Player;
 
 	private var fightButton = new Entity();
-	private var healButtons = new Array<Entity>();
+	private var potionButtons = new Array<Entity>();
 	// private var specialButton = new Entity();
 
 	private var strategy = new MultipleChoiceNbackStreamStrategy();
@@ -78,13 +78,22 @@ class PlayState extends TurboState
 		var numHealthPotions:Int = Config.get("healthPotions");
 		for (i in 0 ... numHealthPotions)
 		{
-			var healButton = new Entity().image("assets/images/heal.png")
-				.move(25, 450 + (i * 70)).onClick(function(x, y) {
-					trace("HEAL!!!!");
+			var potionButton = new Entity().image("assets/images/heal.png");
+			potionButton.move(25, 450 + (i * 70)).onClick(function(x, y) {
+					var playerHealth = player.get(HealthComponent);
+					var playerMaxHealth = playerHealth.totalHealth;
+					var healthToHeal = Std.int(Std.int(Config.get("healthPercentRestoredPerPotion")) / 100 * playerMaxHealth);
+					playerHealth.heal(healthToHeal);
+					this.updateHealthDisplay();
+					this.potionButtons.remove(potionButton);
+
+					var img = potionButton.get(ImageComponent);
+					img.alpha = 0; // "die"
+					this.remove(img.sprite);
 				});
 
-			this.healButtons.push(healButton);
-			this.entities.push(healButton);
+			this.potionButtons.push(potionButton);
+			this.entities.push(potionButton);
 		}
 	}
 
@@ -99,9 +108,9 @@ class PlayState extends TurboState
 		var img = fightButton.get(ImageComponent);
 		img.alpha = 1 - img.alpha;
 
-		for (healButton in this.healButtons)
+		for (potionButton in this.potionButtons)
 		{
-			healButton.get(ImageComponent).alpha = img.alpha;
+			potionButton.get(ImageComponent).alpha = img.alpha;
 		}
 	}
 
@@ -140,14 +149,14 @@ class PlayState extends TurboState
 		else
 		{
 			this.player.get(HealthComponent).damage(damageThisRound);	
-			var currentHealth:Int = this.player.get(HealthComponent).currentHealth;
 			this.statusText.get(TextComponent).setText('Got hit for ${damageThisRound} damage! ATTACK!');
-			this.healthText.get(TextComponent).setText('Health: ${currentHealth}');
+			this.updateHealthDisplay();
 
-			if (currentHealth <= 0)
+			if (this.player.get(HealthComponent).currentHealth <= 0)
 			{
 				this.entities.push(new Entity().image("assets/images/overlay.png"));
 				this.entities.push(new Entity().text("GAME OVER", 72).move(40, 450));
+				// TODO: disable all buttons, etc.
 			}
 		}
 
@@ -159,7 +168,12 @@ class PlayState extends TurboState
 	private function getCurrentTurn():WhoseTurn
 	{
 		return this.currentTurn;
-	}	
+	}
+
+	private function updateHealthDisplay():Void
+	{
+		this.healthText.get(TextComponent).setText('Health: ${this.player.get(HealthComponent).currentHealth}');
+	}
 }
 
 enum WhoseTurn

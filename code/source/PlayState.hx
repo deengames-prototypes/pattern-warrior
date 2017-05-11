@@ -75,7 +75,8 @@ class PlayState extends TurboState
 
 		this.entities.push(fightButton);
 
-		for (i in 0 ... 3)
+		var numHealthPotions:Int = Config.get("healthPotions");
+		for (i in 0 ... numHealthPotions)
 		{
 			var healButton = new Entity().image("assets/images/heal.png")
 				.move(25, 450 + (i * 70)).onClick(function(x, y) {

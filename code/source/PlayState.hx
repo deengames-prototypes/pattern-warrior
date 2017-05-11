@@ -93,10 +93,16 @@ class PlayState extends TurboState
 		super.update(elapsed);
 	}
 
+	// also flips heal button visibility
 	private function flipfightButtonVisibility():Void
 	{
 		var img = fightButton.get(ImageComponent);
 		img.alpha = 1 - img.alpha;
+
+		for (healButton in this.healButtons)
+		{
+			healButton.get(ImageComponent).alpha = img.alpha;
+		}
 	}
 
 	private function updateOpponentHealthText():Void

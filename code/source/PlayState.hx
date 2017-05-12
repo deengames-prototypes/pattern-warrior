@@ -65,10 +65,10 @@ class PlayState extends TurboState
 		this.entities.push(opponentHealthText);
 		this.updateOpponentHealthText();		
 
-		statusText = new Entity().text("Memorize and attack!", 16).move(25, 700);
+		statusText = new Entity().text("Memorize and attack!", 16).move(25, 500);
 		this.entities.push(statusText);
 		
-		fightButton.image("assets/images/fight.png").move(150, 550).onClick(function(x, y) {
+		fightButton.image("assets/images/fight.png").move(450, 350).onClick(function(x, y) {
 			this.strategy.onFightButtonClicked();
 			this.flipfightButtonVisibility();
 		});
@@ -79,7 +79,7 @@ class PlayState extends TurboState
 		for (i in 0 ... numHealthPotions)
 		{
 			var potionButton = new Entity().image("assets/images/heal.png");
-			potionButton.move(25, 450 + (i * 70)).onClick(function(x, y) {
+			potionButton.move(960 - 25 - (64 * (i + 1)), 400).onClick(function(x, y) {
 					var playerHealth = player.get(HealthComponent);
 					var playerMaxHealth = playerHealth.totalHealth;
 					var healthToHeal = Std.int(Std.int(Config.get("healthPercentRestoredPerPotion")) / 100 * playerMaxHealth);
@@ -155,7 +155,7 @@ class PlayState extends TurboState
 			if (this.player.get(HealthComponent).currentHealth <= 0)
 			{
 				this.entities.push(new Entity().image("assets/images/overlay.png"));
-				this.entities.push(new Entity().text("GAME OVER", 72).move(40, 450));
+				this.entities.push(new Entity().text("GAME OVER", 72).move(40, 250));
 				// TODO: disable all buttons, etc.
 			}
 		}

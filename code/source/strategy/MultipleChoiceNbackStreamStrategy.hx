@@ -43,6 +43,10 @@ class MultipleChoiceNbackStreamStrategy
     // Letters for this turn, like right now
     private var currentTurnLetters = new Array<String>();
 
+    // Special mode: unlimited turns.
+    private var specialMode:Bool = false;
+    private var abortRound:Bool = false; // when you fail in special mode
+
     // UI controls
     private var currentLetterDisplay:Array<Entity>;
     private var status:Entity;
@@ -94,6 +98,13 @@ class MultipleChoiceNbackStreamStrategy
     {
         this.generateLettersForThisTurn();        
         this.showCurrentTurn();
+        this.specialMode = false;
+    }
+
+    public function onSpecialButtonClicked()
+    {
+        this.onFightButtonClicked();        
+        this.specialMode = true; // set to false above, needs to be true
     }
 
     private function showCurrentTurn():Void
@@ -186,7 +197,13 @@ class MultipleChoiceNbackStreamStrategy
         {
             if (whoseTurn == WhoseTurn.Player)
             {
-                damageThisRound += DAMAGE_PER_MISSED_ATTACK;                
+                damageThisRound += DAMAGE_PER_MISSED_ATTACK;
+                
+                if (this.specialMode == true)
+                {
+                    // special mode turns off on first miss
+                    this.abortRound = true;    
+                }
             }
             else
             {
@@ -197,7 +214,7 @@ class MultipleChoiceNbackStreamStrategy
 
         this.lettersPickedThisRound.push(letter);
         
-        if (this.lettersPickedThisRound.length < this.turnsCount)
+        if (abortRound == false && (this.specialMode == true || this.lettersPickedThisRound.length < this.turnsCount))
         {
             this.generateLettersForThisTurn();
             this.showCurrentTurn();
@@ -215,8 +232,11 @@ class MultipleChoiceNbackStreamStrategy
             this.damageThisRound = 0;
             this.lettersPickedThisRound = new Array<String>();
 
+            abortRound = false;
+            this.specialMode = false;
+
             // next round is harder
-            turnsCount += turnsGrowthPerRound;            
+            turnsCount += turnsGrowthPerRound;                 
         }
     }
 }

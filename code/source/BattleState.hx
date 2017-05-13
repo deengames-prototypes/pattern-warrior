@@ -4,6 +4,8 @@ import flixel.FlxG;
 
 import models.Monster;
 import models.Player;
+import models.Game;
+
 import strategy.MatchTilesStrategy;
 import strategy.NbackStreamStrategy;
 import strategy.MultipleChoiceNbackStreamStrategy;
@@ -15,7 +17,7 @@ import turbo.ecs.components.HealthComponent;
 import turbo.ecs.components.ImageComponent;
 import turbo.ecs.components.TextComponent;
 
-class PlayState extends TurboState
+class BattleState extends TurboState
 {
 	private var healthText:Entity;
 	private var opponentHealthText:Entity;
@@ -41,7 +43,7 @@ class PlayState extends TurboState
 	{
 		super.create();
 
-		this.player = new Player();
+		this.player = Game.instance.player;
 		this.entities.push(this.player);
 
 		this.strategy.create(this.entities, this.onRoundEnd, this.getCurrentTurn);

@@ -1,7 +1,7 @@
 package strategy;
 
 import flixel.math.FlxRandom;
-import PlayState; // whoseturn
+import BattleState; // whoseturn
 
 import turbo.Config;
 import turbo.ecs.Entity;

@@ -18,19 +18,16 @@ class Monster extends Entity
     private static var adjectives:Array<String> = ["scary", "terrifying", "huge", "poisonous"];
 
     private static var random = new FlxRandom();
-    private static var numSlain:Int = 0;
 
     public function new()
     {
         super();
 
         var initialMonsterHealth:Int = Config.get("initialMonsterHealth");
-        var perMonsterHealthIncrease:Int = Config.get("perMonsterHealthIncrease");
 
         var c = random.getObject(colours);
         this.colour(c[0], c[1], c[2]);
-        this.health(initialMonsterHealth + (perMonsterHealthIncrease * numSlain));
-        numSlain++; // we're dead, sooner or later
+        this.health(initialMonsterHealth);
         this.setData("name", '${random.getObject(adjectives)} ${random.getObject(nouns)}');
     }
 }

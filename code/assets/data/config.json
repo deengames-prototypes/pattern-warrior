@@ -1,7 +1,6 @@
 {    
     "playerHealth": 50,
     "initialMonsterHealth": 10,
-    "perMonsterHealthIncrease": 2,
 
     // Match strategy
     "matchDamagePerHit": 5,

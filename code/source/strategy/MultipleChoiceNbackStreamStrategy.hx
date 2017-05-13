@@ -7,8 +7,7 @@ import turbo.Config;
 import turbo.ecs.components.TextComponent;
 import turbo.ecs.Entity;
 
-
-import PlayState; // whoseturn
+import BattleState; // whoseturn
 
 class MultipleChoiceNbackStreamStrategy
 {

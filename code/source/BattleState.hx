@@ -44,13 +44,12 @@ class BattleState extends TurboState
 		super.create();
 
 		this.player = Game.instance.player;
-		this.entities.push(this.player);
 
 		this.strategy.create(this.entities, this.onRoundEnd, this.getCurrentTurn);
 
 		// Text that shows health
 		healthText = new Entity()
-			.text('Health: ${this.player.get(HealthComponent).currentHealth}', 24)
+			.text('Health: ${this.player.healthComponent.currentHealth}', 24)
 			.move(200, 32);
 
 		this.entities.push(healthText);
@@ -84,16 +83,18 @@ class BattleState extends TurboState
 			this.flipUiButtonsVisibility();
 		});
 
-		var numHealthPotions:Int = Config.get("healthPotions");
+		var numHealthPotions:Int = player.numHealthPotions;
 		for (i in 0 ... numHealthPotions)
 		{
 			var potionButton = new Entity().image("assets/images/heal.png");
 			potionButton.move(960 - 25 - (64 * (i + 1)), 400).onClick(function(x, y)
 			{
-					var playerHealth = player.get(HealthComponent);
+					var playerHealth = player.healthComponent;
 					var playerMaxHealth = playerHealth.totalHealth;
 					var healthToHeal = Std.int(Std.int(Config.get("healthPercentRestoredPerPotion")) / 100 * playerMaxHealth);
 					playerHealth.heal(healthToHeal);
+					player.numHealthPotions -= 1;
+
 					this.updateHealthDisplay();
 					this.potionButtons.remove(potionButton);
 
@@ -162,11 +163,11 @@ class BattleState extends TurboState
 		}
 		else
 		{
-			this.player.get(HealthComponent).damage(damageThisRound);	
+			this.player.healthComponent.damage(damageThisRound);	
 			this.statusText.get(TextComponent).setText('Got hit for ${damageThisRound} damage! ATTACK!');
 			this.updateHealthDisplay();
 
-			if (this.player.get(HealthComponent).currentHealth <= 0)
+			if (this.player.healthComponent.currentHealth <= 0)
 			{
 				this.entities.push(new Entity().image("assets/images/overlay.png"));
 				this.entities.push(new Entity().text("GAME OVER", 72).move(40, 250));
@@ -186,7 +187,7 @@ class BattleState extends TurboState
 
 	private function updateHealthDisplay():Void
 	{
-		this.healthText.get(TextComponent).setText('Health: ${this.player.get(HealthComponent).currentHealth}');
+		this.healthText.get(TextComponent).setText('Health: ${this.player.healthComponent.currentHealth}');
 	}
 }
 

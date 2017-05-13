@@ -4,15 +4,16 @@ import turbo.ecs.Entity;
 import turbo.ecs.components.HealthComponent;
 import turbo.Config;
 
-class Player extends Entity
+class Player
 {
+   public var healthComponent(default, null):HealthComponent;
+   public var numHealthPotions:Int;
+    // TODO: SP (and cost per skill use) goes in here
+
     public function new()
     {
-        super();
-        var totalHealth:Int = Config.get("playerHealth");
-        this.health(totalHealth);
-
-        // TODO: number of potions goes in here
-        // TODO: SP (and cost per skill use) goes in here
+        var health:Int = Config.get("playerHealth");
+        this.healthComponent = new HealthComponent(health, null);
+        this.numHealthPotions = Config.get("healthPotions");
     }
 }

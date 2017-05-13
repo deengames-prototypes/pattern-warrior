@@ -20,5 +20,8 @@
 
     // N-back multiple
     "multiNbackLettersPerTurn": 4,
-    "multiNbackUniqueLettersPercent": 50
+    "multiNbackUniqueLettersPercent": 50,
+
+    "healthPotions": 3,
+    "healthPercentRestoredPerPotion": 65
 }

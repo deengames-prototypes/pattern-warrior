@@ -34,9 +34,15 @@ ApplicationMain.create = function() {
 	types.push("IMAGE");
 	urls.push("assets/images/current.png");
 	types.push("IMAGE");
+	urls.push("assets/images/defend.png");
+	types.push("IMAGE");
 	urls.push("assets/images/down-wrong.png");
 	types.push("IMAGE");
 	urls.push("assets/images/down.png");
+	types.push("IMAGE");
+	urls.push("assets/images/fight.png");
+	types.push("IMAGE");
+	urls.push("assets/images/heal.png");
 	types.push("IMAGE");
 	urls.push("assets/images/images-go-here.txt");
 	types.push("TEXT");
@@ -49,6 +55,8 @@ ApplicationMain.create = function() {
 	urls.push("assets/images/right-wrong.png");
 	types.push("IMAGE");
 	urls.push("assets/images/right.png");
+	types.push("IMAGE");
+	urls.push("assets/images/special.png");
 	types.push("IMAGE");
 	urls.push("assets/images/start.png");
 	types.push("IMAGE");
@@ -100,7 +108,7 @@ ApplicationMain.init = function() {
 	}
 };
 ApplicationMain.main = function() {
-	ApplicationMain.config = { build : "324", company : "Deen Games", file : "PatternWarrior", fps : 60, name : "Pattern Warrior", orientation : "", packageName : "com.example.myapp", version : "0.0.1", windows : [{ antialiasing : 0, background : 2236962, borderless : false, depthBuffer : false, display : 0, fullscreen : false, hardware : false, height : 768, parameters : "{}", resizable : false, stencilBuffer : true, title : "Pattern Warrior", vsync : true, width : 432, x : null, y : null}]};
+	ApplicationMain.config = { build : "42", company : "Deen Games", file : "PatternWarrior", fps : 60, name : "Pattern Warrior", orientation : "", packageName : "com.example.myapp", version : "0.0.1", windows : [{ antialiasing : 0, background : 2236962, borderless : false, depthBuffer : false, display : 0, fullscreen : false, hardware : false, height : 540, parameters : "{}", resizable : false, stencilBuffer : true, title : "Pattern Warrior", vsync : true, width : 960, x : null, y : null}]};
 };
 ApplicationMain.start = function() {
 	var hasMain = false;
@@ -2211,7 +2219,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this7.h[id] = value3;
 	}
-	id = "assets/images/down-wrong.png";
+	id = "assets/images/defend.png";
 	var _this8 = this.path;
 	if(__map_reserved[id] != null) {
 		_this8.setReserved(id,id);
@@ -2225,7 +2233,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this9.h[id] = value4;
 	}
-	id = "assets/images/down.png";
+	id = "assets/images/down-wrong.png";
 	var _this10 = this.path;
 	if(__map_reserved[id] != null) {
 		_this10.setReserved(id,id);
@@ -2239,7 +2247,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this11.h[id] = value5;
 	}
-	id = "assets/images/images-go-here.txt";
+	id = "assets/images/down.png";
 	var _this12 = this.path;
 	if(__map_reserved[id] != null) {
 		_this12.setReserved(id,id);
@@ -2247,13 +2255,13 @@ var DefaultAssetLibrary = function() {
 		_this12.h[id] = id;
 	}
 	var _this13 = this.type;
-	var value6 = "TEXT";
+	var value6 = "IMAGE";
 	if(__map_reserved[id] != null) {
 		_this13.setReserved(id,value6);
 	} else {
 		_this13.h[id] = value6;
 	}
-	id = "assets/images/left-wrong.png";
+	id = "assets/images/fight.png";
 	var _this14 = this.path;
 	if(__map_reserved[id] != null) {
 		_this14.setReserved(id,id);
@@ -2267,7 +2275,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this15.h[id] = value7;
 	}
-	id = "assets/images/left.png";
+	id = "assets/images/heal.png";
 	var _this16 = this.path;
 	if(__map_reserved[id] != null) {
 		_this16.setReserved(id,id);
@@ -2281,7 +2289,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this17.h[id] = value8;
 	}
-	id = "assets/images/overlay.png";
+	id = "assets/images/images-go-here.txt";
 	var _this18 = this.path;
 	if(__map_reserved[id] != null) {
 		_this18.setReserved(id,id);
@@ -2289,13 +2297,13 @@ var DefaultAssetLibrary = function() {
 		_this18.h[id] = id;
 	}
 	var _this19 = this.type;
-	var value9 = "IMAGE";
+	var value9 = "TEXT";
 	if(__map_reserved[id] != null) {
 		_this19.setReserved(id,value9);
 	} else {
 		_this19.h[id] = value9;
 	}
-	id = "assets/images/right-wrong.png";
+	id = "assets/images/left-wrong.png";
 	var _this20 = this.path;
 	if(__map_reserved[id] != null) {
 		_this20.setReserved(id,id);
@@ -2309,7 +2317,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this21.h[id] = value10;
 	}
-	id = "assets/images/right.png";
+	id = "assets/images/left.png";
 	var _this22 = this.path;
 	if(__map_reserved[id] != null) {
 		_this22.setReserved(id,id);
@@ -2323,7 +2331,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this23.h[id] = value11;
 	}
-	id = "assets/images/start.png";
+	id = "assets/images/overlay.png";
 	var _this24 = this.path;
 	if(__map_reserved[id] != null) {
 		_this24.setReserved(id,id);
@@ -2337,7 +2345,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this25.h[id] = value12;
 	}
-	id = "assets/images/up-wrong.png";
+	id = "assets/images/right-wrong.png";
 	var _this26 = this.path;
 	if(__map_reserved[id] != null) {
 		_this26.setReserved(id,id);
@@ -2351,7 +2359,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this27.h[id] = value13;
 	}
-	id = "assets/images/up.png";
+	id = "assets/images/right.png";
 	var _this28 = this.path;
 	if(__map_reserved[id] != null) {
 		_this28.setReserved(id,id);
@@ -2365,7 +2373,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this29.h[id] = value14;
 	}
-	id = "assets/music/music-goes-here.txt";
+	id = "assets/images/special.png";
 	var _this30 = this.path;
 	if(__map_reserved[id] != null) {
 		_this30.setReserved(id,id);
@@ -2373,13 +2381,13 @@ var DefaultAssetLibrary = function() {
 		_this30.h[id] = id;
 	}
 	var _this31 = this.type;
-	var value15 = "TEXT";
+	var value15 = "IMAGE";
 	if(__map_reserved[id] != null) {
 		_this31.setReserved(id,value15);
 	} else {
 		_this31.h[id] = value15;
 	}
-	id = "assets/sounds/sounds-go-here.txt";
+	id = "assets/images/start.png";
 	var _this32 = this.path;
 	if(__map_reserved[id] != null) {
 		_this32.setReserved(id,id);
@@ -2387,13 +2395,13 @@ var DefaultAssetLibrary = function() {
 		_this32.h[id] = id;
 	}
 	var _this33 = this.type;
-	var value16 = "TEXT";
+	var value16 = "IMAGE";
 	if(__map_reserved[id] != null) {
 		_this33.setReserved(id,value16);
 	} else {
 		_this33.h[id] = value16;
 	}
-	id = "flixel/sounds/beep.ogg";
+	id = "assets/images/up-wrong.png";
 	var _this34 = this.path;
 	if(__map_reserved[id] != null) {
 		_this34.setReserved(id,id);
@@ -2401,13 +2409,13 @@ var DefaultAssetLibrary = function() {
 		_this34.h[id] = id;
 	}
 	var _this35 = this.type;
-	var value17 = "SOUND";
+	var value17 = "IMAGE";
 	if(__map_reserved[id] != null) {
 		_this35.setReserved(id,value17);
 	} else {
 		_this35.h[id] = value17;
 	}
-	id = "flixel/sounds/flixel.ogg";
+	id = "assets/images/up.png";
 	var _this36 = this.path;
 	if(__map_reserved[id] != null) {
 		_this36.setReserved(id,id);
@@ -2415,43 +2423,41 @@ var DefaultAssetLibrary = function() {
 		_this36.h[id] = id;
 	}
 	var _this37 = this.type;
-	var value18 = "SOUND";
+	var value18 = "IMAGE";
 	if(__map_reserved[id] != null) {
 		_this37.setReserved(id,value18);
 	} else {
 		_this37.h[id] = value18;
 	}
-	id = "flixel/fonts/nokiafc22.ttf";
-	var _this38 = this.className;
-	var value19 = _$_$ASSET_$_$flixel_$fonts_$nokiafc22_$ttf;
+	id = "assets/music/music-goes-here.txt";
+	var _this38 = this.path;
 	if(__map_reserved[id] != null) {
-		_this38.setReserved(id,value19);
+		_this38.setReserved(id,id);
 	} else {
-		_this38.h[id] = value19;
+		_this38.h[id] = id;
 	}
 	var _this39 = this.type;
-	var value20 = "FONT";
+	var value19 = "TEXT";
 	if(__map_reserved[id] != null) {
-		_this39.setReserved(id,value20);
+		_this39.setReserved(id,value19);
 	} else {
-		_this39.h[id] = value20;
+		_this39.h[id] = value19;
 	}
-	id = "flixel/fonts/monsterrat.ttf";
-	var _this40 = this.className;
-	var value21 = _$_$ASSET_$_$flixel_$fonts_$monsterrat_$ttf;
+	id = "assets/sounds/sounds-go-here.txt";
+	var _this40 = this.path;
 	if(__map_reserved[id] != null) {
-		_this40.setReserved(id,value21);
+		_this40.setReserved(id,id);
 	} else {
-		_this40.h[id] = value21;
+		_this40.h[id] = id;
 	}
 	var _this41 = this.type;
-	var value22 = "FONT";
+	var value20 = "TEXT";
 	if(__map_reserved[id] != null) {
-		_this41.setReserved(id,value22);
+		_this41.setReserved(id,value20);
 	} else {
-		_this41.h[id] = value22;
+		_this41.h[id] = value20;
 	}
-	id = "flixel/images/ui/button.png";
+	id = "flixel/sounds/beep.ogg";
 	var _this42 = this.path;
 	if(__map_reserved[id] != null) {
 		_this42.setReserved(id,id);
@@ -2459,13 +2465,13 @@ var DefaultAssetLibrary = function() {
 		_this42.h[id] = id;
 	}
 	var _this43 = this.type;
-	var value23 = "IMAGE";
+	var value21 = "SOUND";
 	if(__map_reserved[id] != null) {
-		_this43.setReserved(id,value23);
+		_this43.setReserved(id,value21);
 	} else {
-		_this43.h[id] = value23;
+		_this43.h[id] = value21;
 	}
-	id = "flixel/images/logo/default.png";
+	id = "flixel/sounds/flixel.ogg";
 	var _this44 = this.path;
 	if(__map_reserved[id] != null) {
 		_this44.setReserved(id,id);
@@ -2473,11 +2479,69 @@ var DefaultAssetLibrary = function() {
 		_this44.h[id] = id;
 	}
 	var _this45 = this.type;
-	var value24 = "IMAGE";
+	var value22 = "SOUND";
 	if(__map_reserved[id] != null) {
-		_this45.setReserved(id,value24);
+		_this45.setReserved(id,value22);
 	} else {
-		_this45.h[id] = value24;
+		_this45.h[id] = value22;
+	}
+	id = "flixel/fonts/nokiafc22.ttf";
+	var _this46 = this.className;
+	var value23 = _$_$ASSET_$_$flixel_$fonts_$nokiafc22_$ttf;
+	if(__map_reserved[id] != null) {
+		_this46.setReserved(id,value23);
+	} else {
+		_this46.h[id] = value23;
+	}
+	var _this47 = this.type;
+	var value24 = "FONT";
+	if(__map_reserved[id] != null) {
+		_this47.setReserved(id,value24);
+	} else {
+		_this47.h[id] = value24;
+	}
+	id = "flixel/fonts/monsterrat.ttf";
+	var _this48 = this.className;
+	var value25 = _$_$ASSET_$_$flixel_$fonts_$monsterrat_$ttf;
+	if(__map_reserved[id] != null) {
+		_this48.setReserved(id,value25);
+	} else {
+		_this48.h[id] = value25;
+	}
+	var _this49 = this.type;
+	var value26 = "FONT";
+	if(__map_reserved[id] != null) {
+		_this49.setReserved(id,value26);
+	} else {
+		_this49.h[id] = value26;
+	}
+	id = "flixel/images/ui/button.png";
+	var _this50 = this.path;
+	if(__map_reserved[id] != null) {
+		_this50.setReserved(id,id);
+	} else {
+		_this50.h[id] = id;
+	}
+	var _this51 = this.type;
+	var value27 = "IMAGE";
+	if(__map_reserved[id] != null) {
+		_this51.setReserved(id,value27);
+	} else {
+		_this51.h[id] = value27;
+	}
+	id = "flixel/images/logo/default.png";
+	var _this52 = this.path;
+	if(__map_reserved[id] != null) {
+		_this52.setReserved(id,id);
+	} else {
+		_this52.h[id] = id;
+	}
+	var _this53 = this.type;
+	var value28 = "IMAGE";
+	if(__map_reserved[id] != null) {
+		_this53.setReserved(id,value28);
+	} else {
+		_this53.h[id] = value28;
 	}
 	var assetsPrefix = null;
 	if(ApplicationMain.config != null && Object.prototype.hasOwnProperty.call(ApplicationMain.config,"assetsPrefix")) {
@@ -2488,13 +2552,13 @@ var DefaultAssetLibrary = function() {
 		while(k.hasNext()) {
 			var k1 = k.next();
 			var this1 = this.path;
-			var _this46 = this.path;
-			var value25 = assetsPrefix + (__map_reserved[k1] != null ? _this46.getReserved(k1) : _this46.h[k1]);
-			var _this47 = this1;
+			var _this54 = this.path;
+			var value29 = assetsPrefix + (__map_reserved[k1] != null ? _this54.getReserved(k1) : _this54.h[k1]);
+			var _this55 = this1;
 			if(__map_reserved[k1] != null) {
-				_this47.setReserved(k1,value25);
+				_this55.setReserved(k1,value29);
 			} else {
-				_this47.h[k1] = value25;
+				_this55.h[k1] = value29;
 			}
 		}
 	}
@@ -3024,7 +3088,7 @@ NMEPreloader.prototype = $extend(openfl_display_Sprite.prototype,{
 		return 2236962;
 	}
 	,getHeight: function() {
-		var height = 768;
+		var height = 540;
 		if(height > 0) {
 			return height;
 		} else {
@@ -3032,7 +3096,7 @@ NMEPreloader.prototype = $extend(openfl_display_Sprite.prototype,{
 		}
 	}
 	,getWidth: function() {
-		var width = 432;
+		var width = 960;
 		if(width > 0) {
 			return width;
 		} else {
@@ -3747,7 +3811,9 @@ turbo_ecs_TurboState.prototype = $extend(flixel_FlxState.prototype,{
 });
 var PlayState = function() {
 	this.strategy = new strategy_MultipleChoiceNbackStreamStrategy();
-	this.playButton = new turbo_ecs_Entity();
+	this.specialButton = new turbo_ecs_Entity();
+	this.potionButtons = [];
+	this.fightButton = new turbo_ecs_Entity();
 	this.currentTurn = WhoseTurn.Player;
 	turbo_ecs_TurboState.call(this);
 };
@@ -3765,25 +3831,60 @@ PlayState.prototype = $extend(turbo_ecs_TurboState.prototype,{
 		this.entities.push(this.healthText);
 		this.opponent = new models_Monster();
 		this.entities.push(this.opponent);
-		this.opponent.move(32,440);
+		this.opponent.move(32,340);
 		this.opponent.size(64,64);
-		this.opponentHealthText = new turbo_ecs_Entity().text("Placeholder!",24).move(32,400);
+		this.opponentHealthText = new turbo_ecs_Entity().text("Placeholder!",24).move(32,300);
 		this.entities.push(this.opponentHealthText);
 		this.updateOpponentHealthText();
-		this.statusText = new turbo_ecs_Entity().text("Memorize and attack!",16).move(25,725);
+		this.statusText = new turbo_ecs_Entity().text("Memorize and attack!",16).move(25,500);
 		this.entities.push(this.statusText);
-		this.playButton.image("assets/images/start.png").move(150,550).onClick(function(x,y) {
-			_gthis.strategy.onPlayButtonClicked();
-			_gthis.flipPlayButtonVisibility();
+		this.fightButton.image("assets/images/fight.png").move(450,350).onClick(function(x,y) {
+			_gthis.strategy.onFightButtonClicked();
+			_gthis.flipUiButtonsVisibility();
 		});
-		this.entities.push(this.playButton);
+		this.entities.push(this.fightButton);
+		this.specialButton.image("assets/images/special.png").move(600,350).onClick(function(x1,y1) {
+			_gthis.strategy.onSpecialButtonClicked();
+			_gthis.flipUiButtonsVisibility();
+		});
+		var numHealthPotions = turbo_Config.get("healthPotions");
+		var _g1 = 0;
+		var _g = numHealthPotions;
+		while(_g1 < _g) {
+			var i = _g1++;
+			var potionButton = [new turbo_ecs_Entity().image("assets/images/heal.png")];
+			potionButton[0].move(935 - 64 * (i + 1),400).onClick((function(potionButton1) {
+				return function(x2,y2) {
+					var playerHealth = _gthis.player.get(turbo_ecs_components_HealthComponent);
+					var playerMaxHealth = playerHealth.totalHealth;
+					var healthToHeal = (turbo_Config.get("healthPercentRestoredPerPotion") | 0) / 100 * playerMaxHealth | 0;
+					playerHealth.heal(healthToHeal);
+					_gthis.updateHealthDisplay();
+					HxOverrides.remove(_gthis.potionButtons,potionButton1[0]);
+					var img = potionButton1[0].get(turbo_ecs_components_ImageComponent);
+					img.set_alpha(0);
+					_gthis.remove(img.sprite);
+				};
+			})(potionButton));
+			this.potionButtons.push(potionButton[0]);
+			this.entities.push(potionButton[0]);
+		}
 	}
 	,update: function(elapsed) {
 		turbo_ecs_TurboState.prototype.update.call(this,elapsed);
 	}
-	,flipPlayButtonVisibility: function() {
-		var img = this.playButton.get(turbo_ecs_components_ImageComponent);
+	,flipUiButtonsVisibility: function() {
+		var img = this.fightButton.get(turbo_ecs_components_ImageComponent);
+		img.setImage(this.currentTurn == WhoseTurn.Player ? "assets/images/fight.png" : "assets/images/defend.png");
 		img.set_alpha(1 - img.get_alpha());
+		var _g = 0;
+		var _g1 = this.potionButtons;
+		while(_g < _g1.length) {
+			var potionButton = _g1[_g];
+			++_g;
+			potionButton.get(turbo_ecs_components_ImageComponent).set_alpha(img.get_alpha());
+		}
+		this.specialButton.get(turbo_ecs_components_ImageComponent).sprite.set_alpha(this.currentTurn == WhoseTurn.Player ? img.get_alpha() : 0);
 	}
 	,updateOpponentHealthText: function() {
 		var text = "" + Std.string(this.opponent.getData("name")) + ": " + this.opponent.get(turbo_ecs_components_HealthComponent).currentHealth;
@@ -3805,19 +3906,21 @@ PlayState.prototype = $extend(turbo_ecs_TurboState.prototype,{
 			this.updateOpponentHealthText();
 		} else {
 			this.player.get(turbo_ecs_components_HealthComponent).damage(damageThisRound);
-			var currentHealth = this.player.get(turbo_ecs_components_HealthComponent).currentHealth;
 			this.statusText.get(turbo_ecs_components_TextComponent).setText("Got hit for " + damageThisRound + " damage! ATTACK!");
-			this.healthText.get(turbo_ecs_components_TextComponent).setText("Health: " + currentHealth);
-			if(currentHealth <= 0) {
+			this.updateHealthDisplay();
+			if(this.player.get(turbo_ecs_components_HealthComponent).currentHealth <= 0) {
 				this.entities.push(new turbo_ecs_Entity().image("assets/images/overlay.png"));
-				this.entities.push(new turbo_ecs_Entity().text("GAME OVER",72).move(40,450));
+				this.entities.push(new turbo_ecs_Entity().text("GAME OVER",72).move(40,250));
 			}
 		}
 		this.currentTurn = this.currentTurn == WhoseTurn.Player ? WhoseTurn.Monster : WhoseTurn.Player;
-		this.flipPlayButtonVisibility();
+		this.flipUiButtonsVisibility();
 	}
 	,getCurrentTurn: function() {
 		return this.currentTurn;
+	}
+	,updateHealthDisplay: function() {
+		this.healthText.get(turbo_ecs_components_TextComponent).setText("Health: " + this.player.get(turbo_ecs_components_HealthComponent).currentHealth);
 	}
 	,__class__: PlayState
 });
@@ -75297,11 +75400,13 @@ strategy_MatchTilesStrategy.prototype = {
 };
 var strategy_MultipleChoiceNbackStreamStrategy = function() {
 	this.damageThisRound = 0;
+	this.abortRound = false;
+	this.specialMode = false;
 	this.currentTurnLetters = [];
 	this.lettersPickedThisRound = [];
 	this.ALL_LETTERS = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
 	this.random = new flixel_math_FlxRandom();
-	this.LETTER_POSITIONS = [[250,100],[200,150],[300,150],[250,200]];
+	this.LETTER_POSITIONS = [[200,100],[150,150],[250,150],[200,200]];
 };
 $hxClasses["strategy.MultipleChoiceNbackStreamStrategy"] = strategy_MultipleChoiceNbackStreamStrategy;
 strategy_MultipleChoiceNbackStreamStrategy.__name__ = ["strategy","MultipleChoiceNbackStreamStrategy"];
@@ -75343,9 +75448,14 @@ strategy_MultipleChoiceNbackStreamStrategy.prototype = {
 		}
 		entities.push(this.status);
 	}
-	,onPlayButtonClicked: function() {
+	,onFightButtonClicked: function() {
 		this.generateLettersForThisTurn();
 		this.showCurrentTurn();
+		this.specialMode = false;
+	}
+	,onSpecialButtonClicked: function() {
+		this.onFightButtonClicked();
+		this.specialMode = true;
 	}
 	,showCurrentTurn: function() {
 		var _g1 = 0;
@@ -75400,6 +75510,9 @@ strategy_MultipleChoiceNbackStreamStrategy.prototype = {
 		} else {
 			if(whoseTurn == WhoseTurn.Player) {
 				this.damageThisRound += this.DAMAGE_PER_MISSED_ATTACK;
+				if(this.specialMode == true) {
+					this.abortRound = true;
+				}
 			} else {
 				this.damageThisRound += this.DAMAGE_PER_MISSED_BLOCK;
 			}
@@ -75408,7 +75521,7 @@ strategy_MultipleChoiceNbackStreamStrategy.prototype = {
 			});
 		}
 		this.lettersPickedThisRound.push(letter);
-		if(this.lettersPickedThisRound.length < this.turnsCount) {
+		if(this.abortRound == false && (this.specialMode == true || this.lettersPickedThisRound.length < this.turnsCount)) {
 			this.generateLettersForThisTurn();
 			this.showCurrentTurn();
 		} else {
@@ -75422,6 +75535,8 @@ strategy_MultipleChoiceNbackStreamStrategy.prototype = {
 			this.onRoundEnd(this.damageThisRound);
 			this.damageThisRound = 0;
 			this.lettersPickedThisRound = [];
+			this.abortRound = false;
+			this.specialMode = false;
 			this.turnsCount += this.turnsGrowthPerRound;
 		}
 	}
@@ -75691,6 +75806,10 @@ turbo_ecs_components_HealthComponent.prototype = $extend(turbo_ecs_components_Ab
 		if(!wasDead && this.currentHealth <= 0) {
 			this.trigger("Death");
 		}
+	}
+	,heal: function(health) {
+		this.currentHealth += health;
+		this.currentHealth = Math.min(this.currentHealth,this.totalHealth) | 0;
 	}
 	,__class__: turbo_ecs_components_HealthComponent
 });

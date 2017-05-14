@@ -1,6 +1,7 @@
 package;
 
 import flixel.FlxG;
+import flixel.group.FlxGroup;
 
 import models.Monster;
 import models.Player;
@@ -28,7 +29,7 @@ class MapState extends TurboState
 	// Data objects!
 	private var player:Player;
 
-	private var playerEntity = new Entity();    
+	private var playerEntity = new Entity(["player"]); 
 
 	public function new()
 	{
@@ -39,16 +40,17 @@ class MapState extends TurboState
 	{
 		super.create();
 
-		this.player = Game.instance.player;
-        var playerEntity = new Entity().size(64, 64).moveWithKeyboard(250).move(50, 50);
-        this.entities.push(playerEntity);
-
         this.addBorderWalls();
+
+		this.player = Game.instance.player;
+        var playerEntity = new Entity(["player"]).size(64, 64).moveWithKeyboard(250).move(50, 50);
+        this.addEntity(playerEntity);
+		playerEntity.collideWith("wall");
 	}
 
 	override public function update(elapsed:Float):Void
 	{
-		super.update(elapsed);
+		super.update(elapsed);		
 	}
 
     private function addBorderWalls():Void
@@ -61,8 +63,7 @@ class MapState extends TurboState
 
     private function addWall(x:Int, y:Int, width:Int, height:Int):Void
     {
-        var wall = new Entity().move(x, y).size(width, height).colour(192, 192, 192);
-        this.entities.push(wall);
+        var wall = new Entity(["wall"]).move(x, y).size(width, height).colour(192, 192, 192).immovable();
+        this.addEntity(wall);
     }
-
 }

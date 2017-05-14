@@ -52,10 +52,10 @@ class BattleState extends TurboState
 			.text('Health: ${this.player.healthComponent.currentHealth}', 24)
 			.move(200, 32);
 
-		this.entities.push(healthText);
+		this.addEntity(healthText);
 		
 		this.opponent = new Monster();
-		this.entities.push(this.opponent);
+		this.addEntity(this.opponent);
 		opponent.move(32, 300 + 16 + 24);
 		opponent.size(64, 64);
 
@@ -63,11 +63,11 @@ class BattleState extends TurboState
 			.text("Placeholder!", 24)
 			.move(32, 300);
 			
-		this.entities.push(opponentHealthText);
+		this.addEntity(opponentHealthText);
 		this.updateOpponentHealthText();		
 
 		statusText = new Entity().text("Memorize and attack!", 16).move(25, 500);
-		this.entities.push(statusText);
+		this.addEntity(statusText);
 		
 		fightButton.image("assets/images/fight.png").move(450, 350).onClick(function(x, y)
 		{
@@ -75,7 +75,7 @@ class BattleState extends TurboState
 			this.flipUiButtonsVisibility();
 		});
 
-		this.entities.push(fightButton);
+		this.addEntity(fightButton);
 
 		specialButton.image("assets/images/special.png").move(600, 350).onClick(function(x, y)
 		{
@@ -104,7 +104,7 @@ class BattleState extends TurboState
 				});
 
 			this.potionButtons.push(potionButton);
-			this.entities.push(potionButton);
+			this.addEntity(potionButton);
 		}
 	}
 
@@ -156,7 +156,7 @@ class BattleState extends TurboState
 			{
 				this.entities.remove(this.opponent);
 				this.opponent = new Monster();
-				this.entities.push(this.opponent);
+				this.addEntity(this.opponent);
 			}
 
 			this.updateOpponentHealthText();
@@ -169,8 +169,8 @@ class BattleState extends TurboState
 
 			if (this.player.healthComponent.currentHealth <= 0)
 			{
-				this.entities.push(new Entity().image("assets/images/overlay.png"));
-				this.entities.push(new Entity().text("GAME OVER", 72).move(40, 250));
+				this.addEntity(new Entity().image("assets/images/overlay.png"));
+				this.addEntity(new Entity().text("GAME OVER", 72).move(40, 250));
 				// TODO: disable all buttons, etc.
 			}
 		}

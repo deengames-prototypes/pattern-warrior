@@ -9,7 +9,7 @@ import turbo.ecs.Entity;
 
 import BattleState; // whoseturn
 
-class MultipleChoiceNbackStreamStrategy
+class MultipleChoiceNbackStreamStrategy implements IBattleStrategy
 {
     private var onRoundEnd:Int->Void; // callback to PlayState, receives damage
     private var getCurrentTurn:Void->WhoseTurn; // Callback to PlayState. Receives who's turn it is.

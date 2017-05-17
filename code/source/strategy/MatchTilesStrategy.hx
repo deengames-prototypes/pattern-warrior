@@ -8,7 +8,7 @@ import turbo.ecs.Entity;
 import turbo.ecs.components.ImageComponent;
 import turbo.ecs.components.PositionComponent;
 
-class MatchTilesStrategy
+class MatchTilesStrategy implements IBattleStrategy
 {
     private static inline var MAX_TILES_PER_ROW:Int = 8; // 8 fit in a single row on-screen
 	private static inline var MAX_GOUPS:Int = 5; // 5 groups max.
@@ -80,9 +80,9 @@ class MatchTilesStrategy
 		this.hideInputControls();
     }
 
-	public function onPlayButtonClicked():Void
-	{
- 		// Blank out inputs
+    public function onFightButtonClicked():Void
+    {
+        // Blank out inputs
 		for (tile in tileSprites)
 		{
 			tile.get(ImageComponent).image ="assets/images/blank.png";
@@ -90,7 +90,12 @@ class MatchTilesStrategy
 		
 		this.showInputControls();
 		this.showCurrentTile(0);
-	}
+    }
+
+    public function onSpecialButtonClicked():Void
+    {
+
+    }
 
     private function addInputControl(tile:Tile, entities:Array<Entity>):Void
 	{

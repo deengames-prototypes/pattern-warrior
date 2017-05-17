@@ -6,6 +6,7 @@ import models.Monster;
 import models.Player;
 import models.Game;
 
+import strategy.IBattleStrategy;
 import strategy.MatchTilesStrategy;
 import strategy.NbackStreamStrategy;
 import strategy.MultipleChoiceNbackStreamStrategy;
@@ -32,7 +33,7 @@ class BattleState extends TurboState
 	private var potionButtons = new Array<Entity>();
 	private var specialButton = new Entity();
 
-	private var strategy = new MultipleChoiceNbackStreamStrategy();
+	private var strategy:IBattleStrategy;
 
 	public function new()
 	{
@@ -45,6 +46,7 @@ class BattleState extends TurboState
 
 		this.player = Game.instance.player;
 
+        this.strategy = new MultipleChoiceNbackStreamStrategy();
 		this.strategy.create(this.container.entities, this.onRoundEnd, this.getCurrentTurn);
 
 		// Text that shows health

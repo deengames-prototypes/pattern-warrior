@@ -13,7 +13,7 @@ class Player
     public function new()
     {
         var health:Int = Config.get("playerHealth");
-        this.healthComponent = new HealthComponent(health, null);
+        this.healthComponent = new HealthComponent(health);
         this.numHealthPotions = Config.get("healthPotions");
     }
 }

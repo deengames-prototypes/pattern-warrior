@@ -63,7 +63,8 @@ class NbackStreamStrategy
 
         this.currentLetterDisplay = new Entity().text("", 72).hide().move(225, 150);
         
-        this.isUniqueButton = new Entity().text("Unique").hide().move(50, 200).onClick(function(x, y)
+        this.isUniqueButton = new Entity().text("Unique").hide().move(50, 200)
+        .onClick(function(s)
         {
             if (this.isUniqueButton.get(TextComponent).text.alpha > 0)
             {
@@ -71,7 +72,8 @@ class NbackStreamStrategy
             }
         }, false);
         
-        this.isntUniqueButton = new Entity().text("Not Unique").hide().move(300, 200).onClick(function(x, y)
+        this.isntUniqueButton = new Entity().text("Not Unique").hide().move(300, 200)
+        .onClick(function(s)
         {
             if (this.isUniqueButton.get(TextComponent).text.alpha > 0)
             {

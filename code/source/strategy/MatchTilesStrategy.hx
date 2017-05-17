@@ -85,7 +85,7 @@ class MatchTilesStrategy
  		// Blank out inputs
 		for (tile in tileSprites)
 		{
-			tile.get(ImageComponent).setImage("assets/images/blank.png");
+			tile.get(ImageComponent).image ="assets/images/blank.png";
 		}
 		
 		this.showInputControls();
@@ -114,7 +114,7 @@ class MatchTilesStrategy
 			e.move(x, y);
 		}
 
-		e.onClick(function(x, y)
+		e.onClick(function(sprite)
 		{
 			this.processInput(e.getData("tile"));
 		});
@@ -150,7 +150,7 @@ class MatchTilesStrategy
 
 	private function showCurrentTile(index:Int):Void
 	{
-		this.indexToSprite(index).get(ImageComponent).setImage("assets/images/current.png");
+		this.indexToSprite(index).get(ImageComponent).image ="assets/images/current.png";
 	}
 
     // Assumes controls are already created
@@ -164,7 +164,7 @@ class MatchTilesStrategy
 				var sprite = this.indexToSprite(index); //this.tileSprites[i * groupSize + j];
 				sprite.setData("tile", tile);
 				var tileName = '${tile}'.toLowerCase();
-				sprite.get(ImageComponent).setImage('assets/images/${tileName}.png');
+				sprite.get(ImageComponent).image ='assets/images/${tileName}.png';
 				sprite.show();
 				index++;
 			}
@@ -215,7 +215,7 @@ class MatchTilesStrategy
 			}
 		}
 
-		sprite.get(ImageComponent).setImage('assets/images/${name}.png');
+		sprite.get(ImageComponent).image ='assets/images/${name}.png';
 		
 		userInput.push(input);
 		if (index == numGroups * groupSize - 1)

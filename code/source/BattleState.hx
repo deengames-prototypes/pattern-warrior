@@ -45,7 +45,7 @@ class BattleState extends TurboState
 
 		this.player = Game.instance.player;
 
-		this.strategy.create(this.entities, this.onRoundEnd, this.getCurrentTurn);
+		this.strategy.create(this.container.entities, this.onRoundEnd, this.getCurrentTurn);
 
 		// Text that shows health
 		healthText = new Entity()
@@ -89,18 +89,17 @@ class BattleState extends TurboState
 			var potionButton = new Entity().image("assets/images/heal.png");
 			potionButton.move(960 - 25 - (64 * (i + 1)), 400).onClick(function(s)
 			{
-					var playerHealth = player.healthComponent;
-					var maxHealth = playerHealth.maximumHealth;
-					var healthToHeal = Std.int(Std.int(Config.get("healthPercentRestoredPerPotion")) / 100 * maxHealth);
-					playerHealth.currentHealth = Math.min(playerHealth.currentHealth + healthToHeal, maxHealth);
+					var health = this.player.healthComponent;
+                    var toHeal = Std.int(Std.int(Config.get("healthPercentRestoredPerPotion")) / 100 * health.maximumHealth);
+                    health.currentHealth = Std.int(Math.min(health.maximumHealth, health.currentHealth + toHeal));
 					player.numHealthPotions -= 1;
 
 					this.updateHealthDisplay();
 					this.potionButtons.remove(potionButton);
 
 					var img = potionButton.get(ImageComponent);
-					img.alpha = 0; // "die"
-					this.remove(img.sprite);
+					img.sprite.alpha = 0; // "die". TODO: remove the entity!!!
+					this.remove(img.sprite);                    
 				});
 
 			this.potionButtons.push(potionButton);
@@ -118,21 +117,21 @@ class BattleState extends TurboState
 	{
 		var img = fightButton.get(ImageComponent);
 		img.image = currentTurn == WhoseTurn.Player ? "assets/images/fight.png" : "assets/images/defend.png";
-		img.alpha = 1 - img.alpha;
+		img.sprite.alpha = 1 - img.sprite.alpha;
 
 		for (potionButton in this.potionButtons)
 		{
-			potionButton.get(ImageComponent).alpha = img.alpha;
+			potionButton.get(ImageComponent).sprite.alpha = img.sprite.alpha;
 		}
 
 		specialButton.get(ImageComponent).sprite.alpha = 
-			currentTurn == WhoseTurn.Player ? img.alpha : 0;		
+			currentTurn == WhoseTurn.Player ? img.sprite.alpha : 0;		
 	}
 
 	private function updateOpponentHealthText():Void
 	{
 		var text = '${this.opponent.getData("name")}: ${this.opponent.get(HealthComponent).currentHealth}';
-		this.opponentHealthText.get(TextComponent).setText(text);
+		this.opponentHealthText.get(TextComponent).text = text;
 	}
 
 	// States call this when the current round is over
@@ -147,15 +146,15 @@ class BattleState extends TurboState
 		if (currentTurn == WhoseTurn.Player)
 		{
 			var health = this.opponent.get(HealthComponent);
-            health.currentHealth = Math.max(0, health.currentHealth - damageThisRound);
+            health.currentHealth = Std.int(Math.max(0, health.currentHealth - damageThisRound));
 
 			var ifDeadMessage:String = this.opponent.get(HealthComponent).currentHealth <= 0 ? '${this.opponent.getData("name")} dies!' : "";
-			this.statusText.get(TextComponent).setText('Hit for ${damageThisRound} damage! ${ifDeadMessage} Defend yourself!');
+			this.statusText.get(TextComponent).text = 'Hit for ${damageThisRound} damage! ${ifDeadMessage} Defend yourself!';
 
 			// Spawn new monster if dead
-			if (this.opponent.get(HealthComponent).currentHealth <= 0)
+			if (health.currentHealth <= 0)
 			{
-				this.entities.remove(this.opponent);
+				this.container.entities.remove(this.opponent);
 				this.opponent = new Monster();
 				this.addEntity(this.opponent);
 			}
@@ -165,11 +164,11 @@ class BattleState extends TurboState
 		else
 		{
 			var health = this.player.healthComponent;
-            health.currentHealth = Math.max(0, health.currentHealth - damageThisRound);	
-			this.statusText.get(TextComponent).setText('Got hit for ${damageThisRound} damage! ATTACK!');
+            health.currentHealth = Std.int(Math.max(0, health.currentHealth - damageThisRound));	
+			this.statusText.get(TextComponent).text = 'Got hit for ${damageThisRound} damage! ATTACK!';
 			this.updateHealthDisplay();
 
-			if (this.player.healthComponent.currentHealth <= 0)
+			if (health.currentHealth <= 0)
 			{
 				this.addEntity(new Entity().image("assets/images/overlay.png"));
 				this.addEntity(new Entity().text("GAME OVER", 72).move(40, 250));
@@ -189,7 +188,7 @@ class BattleState extends TurboState
 
 	private function updateHealthDisplay():Void
 	{
-		this.healthText.get(TextComponent).setText('Health: ${this.player.healthComponent.currentHealth}');
+		this.healthText.get(TextComponent).text = 'Health: ${this.player.healthComponent.currentHealth}';
 	}
 }
 

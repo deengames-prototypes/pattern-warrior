@@ -66,7 +66,7 @@ class NbackStreamStrategy
         this.isUniqueButton = new Entity().text("Unique").hide().move(50, 200)
         .onClick(function(s)
         {
-            if (this.isUniqueButton.get(TextComponent).text.alpha > 0)
+            if (this.isUniqueButton.get(TextComponent).textField.alpha > 0)
             {
                 this.checkCurrentLetterUnique(true);  
             }
@@ -75,7 +75,7 @@ class NbackStreamStrategy
         this.isntUniqueButton = new Entity().text("Not Unique").hide().move(300, 200)
         .onClick(function(s)
         {
-            if (this.isUniqueButton.get(TextComponent).text.alpha > 0)
+            if (this.isUniqueButton.get(TextComponent).textField.alpha > 0)
             {
                 this.checkCurrentLetterUnique(false);  
             }

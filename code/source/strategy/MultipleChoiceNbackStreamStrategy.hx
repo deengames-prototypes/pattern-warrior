@@ -86,7 +86,8 @@ class MultipleChoiceNbackStreamStrategy
             entities.push(e);
         }
 
-        this.status = new Entity().text("").hide().move(25, 32);
+        this.status = new Entity().text("").move(25, 32);
+        entities.push(this.status);
 
         for (ui in this.currentLetterDisplay)
         {

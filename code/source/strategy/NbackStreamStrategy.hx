@@ -81,7 +81,8 @@ class NbackStreamStrategy implements IBattleStrategy
             }
         }, false);
 
-        this.status = new Entity().text("").hide().move(150, 250);
+        this.status = new Entity().text("").move(150, 250);
+        entities.push(status);
 
         entities.push(this.currentLetterDisplay);
         entities.push(this.isUniqueButton);

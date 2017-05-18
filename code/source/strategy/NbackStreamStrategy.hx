@@ -9,7 +9,7 @@ import turbo.ecs.Entity;
 
 import BattleState; // whoseturn
 
-class NbackStreamStrategy
+class NbackStreamStrategy implements IBattleStrategy
 {
     private var onRoundEnd:Int->Void; // callback to PlayState, receives damage
     private var getCurrentTurn:Void->WhoseTurn; // Callback to PlayState. Receives who's turn it is.
@@ -89,7 +89,7 @@ class NbackStreamStrategy
         entities.push(this.status);
     }
 
-    public function onPlayButtonClicked()
+    public function onFightButtonClicked()
     {
         this.generateLettersForThisRound();        
         this.currentLetterDisplay.show();
@@ -98,6 +98,11 @@ class NbackStreamStrategy
         this.showCurrentLetter();
     }
     
+    public function onSpecialButtonClicked():Void
+    {
+        
+    }
+
     private function showCurrentLetter():Void
     {
         this.currentLetterDisplay.text(this.lettersThisRound[this.currentLetterIndex]);

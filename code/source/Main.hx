@@ -13,3 +13,4 @@ class Main extends Sprite
 		addChild(new FlxGame(0, 0, BattleState, 1, 60, 60, true));
 	}
 }
+    

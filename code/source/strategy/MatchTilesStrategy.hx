@@ -102,26 +102,23 @@ class MatchTilesStrategy implements IBattleStrategy
     private function addInputControl(tile:Tile, entities:Array<Entity>):Void
 	{
 		var e = new Entity();
-		var posX = 250;
+		var posX = 450;
 		var posY = 350;
 
 		var tileName = '${tile}'.toLowerCase();
 		e.setData("tile", tile);		
-		//e.colour(255, 0, 0).size(63, 64);
 		e.image('assets/images/${tileName}.png');
 		if (tile == Tile.Up || tile == Tile.Down)
 		{
 			var x = posX;
 			var y = posY - 200 + (tile == Tile.Up ?  -TILE_HEIGHT : TILE_HEIGHT);
 			e.move(x, y);
-			trace("Move to " + x + ", " + y);
 		}
 		else
 		{
 			var x = posX + (tile == Tile.Left ? -TILE_WIDTH : TILE_WIDTH);
 			var y = posY - 200;
 			e.move(x, y);
-			trace("M2ove to " + x + ", " + y);
 		}
 
 		e.onClick(function(sprite:FlxSprite)
@@ -131,7 +128,6 @@ class MatchTilesStrategy implements IBattleStrategy
 
 		entities.push(e);
 		this.inputControls.push(e);
-		trace('Created control for ${tileName}');
 	}
 
 	private function hideInputControls():Void

@@ -10,6 +10,6 @@ class Main extends Sprite
 	{
 		super();
 		new models.Game();
-		addChild(new FlxGame(0, 0, MapState, 1, 60, 60, true));
+		addChild(new FlxGame(0, 0, BattleState, 1, 60, 60, true));
 	}
 }

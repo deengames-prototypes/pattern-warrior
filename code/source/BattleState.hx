@@ -1,6 +1,7 @@
 package;
 
 import flixel.FlxG;
+import flixel.FlxSprite;
 
 import models.Monster;
 import models.Player;
@@ -69,7 +70,7 @@ class BattleState extends TurboState
 		statusText = new Entity().text("Memorize and attack!", 16).move(25, 500);
 		this.addEntity(statusText);
 		
-		fightButton.image("assets/images/fight.png").move(450, 350).onClick(function(s)
+		fightButton.image("assets/images/fight.png").move(450, 350).onClick(function(s:FlxSprite)
 		{
 			this.strategy.onFightButtonClicked();
 			this.flipUiButtonsVisibility();
@@ -77,11 +78,13 @@ class BattleState extends TurboState
 
 		this.addEntity(fightButton);
 
-		specialButton.image("assets/images/special.png").move(600, 350).onClick(function(s)
+		specialButton.image("assets/images/special.png").move(600, 350).onClick(function(s:FlxSprite)
 		{
 			this.strategy.onSpecialButtonClicked();
 			this.flipUiButtonsVisibility();
 		});
+
+		this.addEntity(specialButton);
 
 		var numHealthPotions:Int = player.numHealthPotions;
 		for (i in 0 ... numHealthPotions)

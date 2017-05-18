@@ -1,5 +1,6 @@
 package strategy;
 
+import flixel.FlxSprite;
 import flixel.math.FlxRandom;
 import flixel.util.FlxColor;
 
@@ -77,11 +78,12 @@ class MultipleChoiceNbackStreamStrategy
             var y = LETTER_POSITIONS[i][1];
             // needs text to handle clicks...
             var e = new Entity().text("??", 72).hide().move(x, y);
-            e.onClick(function(s)
+            e.onClick(function(s:FlxSprite)
             {
                 this.checkChoiceForDamage(i);
             }, false);
             this.currentLetterDisplay.push(e);
+            entities.push(e);
         }
 
         this.status = new Entity().text("").hide().move(25, 32);

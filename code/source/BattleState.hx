@@ -101,7 +101,7 @@ class BattleState extends TurboState
 					this.potionButtons.remove(potionButton);
 
 					var img = potionButton.get(ImageComponent);
-					img.sprite.alpha = 0; // "die". TODO: remove the entity!!!
+					img.show = false; // "die". TODO: remove the entity!!!
 					this.remove(img.sprite);                    
 				});
 
@@ -120,15 +120,15 @@ class BattleState extends TurboState
 	{
 		var img = fightButton.get(ImageComponent);
 		img.image = currentTurn == WhoseTurn.Player ? "assets/images/fight.png" : "assets/images/defend.png";
-		img.sprite.alpha = 1 - img.sprite.alpha;
+		img.show = !img.show;
 
 		for (potionButton in this.potionButtons)
 		{
-			potionButton.get(ImageComponent).sprite.alpha = img.sprite.alpha;
+			potionButton.get(ImageComponent).show = img.show;
 		}
 
-		specialButton.get(ImageComponent).sprite.alpha = 
-			currentTurn == WhoseTurn.Player ? img.sprite.alpha : 0;		
+		specialButton.get(ImageComponent).show = 
+			currentTurn == WhoseTurn.Player ? img.show : false;
 	}
 
 	private function updateOpponentHealthText():Void

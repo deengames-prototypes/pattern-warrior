@@ -47,7 +47,7 @@ class BattleState extends TurboState
 
 		this.player = Game.instance.player;
 
-        this.strategy = new NbackStreamStrategy();
+        this.strategy = new MatchTilesStrategy();
 		this.strategy.create(this.container.entities, this.onRoundEnd, this.getCurrentTurn);
 
 		// Text that shows health

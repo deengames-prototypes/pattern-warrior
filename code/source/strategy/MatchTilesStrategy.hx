@@ -1,6 +1,8 @@
 package strategy;
 
 import flixel.math.FlxRandom;
+import flixel.FlxSprite;
+
 import BattleState; // whoseturn
 
 import turbo.Config;
@@ -101,31 +103,35 @@ class MatchTilesStrategy implements IBattleStrategy
 	{
 		var e = new Entity();
 		var posX = 250;
-		var posY = 800;
+		var posY = 350;
 
 		var tileName = '${tile}'.toLowerCase();
-		e.setData("tile", tile);
+		e.setData("tile", tile);		
+		//e.colour(255, 0, 0).size(63, 64);
 		e.image('assets/images/${tileName}.png');
 		if (tile == Tile.Up || tile == Tile.Down)
 		{
 			var x = posX;
 			var y = posY - 200 + (tile == Tile.Up ?  -TILE_HEIGHT : TILE_HEIGHT);
 			e.move(x, y);
+			trace("Move to " + x + ", " + y);
 		}
 		else
 		{
 			var x = posX + (tile == Tile.Left ? -TILE_WIDTH : TILE_WIDTH);
 			var y = posY - 200;
 			e.move(x, y);
+			trace("M2ove to " + x + ", " + y);
 		}
 
-		e.onClick(function(sprite)
+		e.onClick(function(sprite:FlxSprite)
 		{
 			this.processInput(e.getData("tile"));
 		});
 
 		entities.push(e);
 		this.inputControls.push(e);
+		trace('Created control for ${tileName}');
 	}
 
 	private function hideInputControls():Void
@@ -166,7 +172,7 @@ class MatchTilesStrategy implements IBattleStrategy
 		for (i in 0 ... numGroups) {
 			for (j in 0 ... groupSize) {
 				var tile:Tile = random.getObject(ALL_TILES);
-				var sprite = this.indexToSprite(index); //this.tileSprites[i * groupSize + j];
+				var sprite = this.indexToSprite(index);
 				sprite.setData("tile", tile);
 				var tileName = '${tile}'.toLowerCase();
 				sprite.get(ImageComponent).image ='assets/images/${tileName}.png';

@@ -1,0 +1,9 @@
+-debug
+-D dump=pretty
+
+-lib flixel
+-lib flixel-addons
+-lib turbo
+
+-cp source
+-main Main

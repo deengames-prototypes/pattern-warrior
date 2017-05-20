@@ -47,7 +47,7 @@ class BattleState extends TurboState
 
 		this.player = Game.instance.player;
 
-        this.strategy = new MatchTilesStrategy();
+        this.strategy = new MultipleChoiceNbackStreamStrategy();
 		this.strategy.create(this.container.entities, this.onRoundEnd, this.getCurrentTurn);
 
 		// Text that shows health
@@ -122,15 +122,19 @@ class BattleState extends TurboState
 	{
 		var img = fightButton.get(ImageComponent);
 		img.image = currentTurn == WhoseTurn.Player ? "assets/images/fight.png" : "assets/images/defend.png";
-		img.show = !img.show;
+
+		// oh, you glorious hack.
+		var toShow = img.sprite.alpha == 0 ? true : false;
+
+		img.show = toShow;
 
 		for (potionButton in this.potionButtons)
 		{
-			potionButton.get(ImageComponent).show = img.show;
+			potionButton.get(ImageComponent).show = toShow;
 		}
 
 		specialButton.get(ImageComponent).show = 
-			currentTurn == WhoseTurn.Player ? img.show : false;
+			currentTurn == WhoseTurn.Player ? toShow : false;
 	}
 
 	private function updateOpponentHealthText():Void

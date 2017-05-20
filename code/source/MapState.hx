@@ -43,7 +43,7 @@ class MapState extends TurboState
         this.addBorderWalls();
 
 		this.player = Game.instance.player;
-        var playerEntity = new Entity(["player"]).size(64, 64).moveWithKeyboard(250).move(50, 50);
+        var playerEntity = new Entity(["player"]).size(64, 64).colour(255, 0, 0).moveWithKeyboard(250).move(50, 50);
         this.addEntity(playerEntity);
 		playerEntity.collideWith("wall");
 	}
@@ -63,7 +63,7 @@ class MapState extends TurboState
 
     private function addWall(x:Int, y:Int, width:Int, height:Int):Void
     {
-        var wall = new Entity(["wall"]).move(x, y).size(width, height).colour(192, 192, 192).immovable();
+        var wall = new Entity(["wall"]).size(width, height).colour(192, 192, 192).immovable().move(x, y);
         this.addEntity(wall);
     }
 }

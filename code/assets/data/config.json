@@ -1,4 +1,12 @@
-{    
+{   
+    // Generic map stuff
+    "minEnemies": 8,
+    "maxEnemies": 10,
+
+    // Generic battle stuff
+    "healthPotions": 3,
+    "healthPercentRestoredPerPotion": 65,
+
     "playerHealth": 50,
     "initialMonsterHealth": 10,
 
@@ -19,8 +27,5 @@
 
     // N-back multiple
     "multiNbackLettersPerTurn": 4,
-    "multiNbackUniqueLettersPercent": 50,
-
-    "healthPotions": 3,
-    "healthPercentRestoredPerPotion": 65
+    "multiNbackUniqueLettersPercent": 50    
 }

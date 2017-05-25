@@ -16,6 +16,7 @@ import strategy.MultipleChoiceNbackStreamStrategy;
 import turbo.Config;
 import turbo.ecs.TurboState;
 import turbo.ecs.Entity;
+using turbo.ecs.EntityFluentApi;
 import turbo.ecs.components.PositionComponent;
 import turbo.ecs.components.SpriteComponent;
 

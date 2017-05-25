@@ -7,6 +7,7 @@ import BattleState; // whoseturn
 
 import turbo.Config;
 import turbo.ecs.Entity;
+using turbo.ecs.EntityFluentApi;
 import turbo.ecs.components.ImageComponent;
 import turbo.ecs.components.PositionComponent;
 

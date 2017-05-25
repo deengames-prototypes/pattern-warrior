@@ -3,6 +3,7 @@ package models;
 import flixel.math.FlxRandom;
 import turbo.Config;
 import turbo.ecs.Entity;
+using turbo.ecs.EntityFluentApi;
 import turbo.ecs.components.ColourComponent;
 import turbo.ecs.components.HealthComponent;
 

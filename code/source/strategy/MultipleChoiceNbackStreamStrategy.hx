@@ -7,6 +7,7 @@ import flixel.util.FlxColor;
 import turbo.Config;
 import turbo.ecs.components.TextComponent;
 import turbo.ecs.Entity;
+using turbo.ecs.EntityFluentApi;
 
 import BattleState; // whoseturn
 

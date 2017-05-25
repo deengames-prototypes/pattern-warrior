@@ -44,7 +44,9 @@ class MapState extends TurboState
 
 		this.addEntity(new Entity("background").size(this.width, this.height).colour(0, 128, 0));
 		
-        this.addBorderWalls();		
+        this.addBorderWalls();
+		this.addRandomWalls();
+
 		this.createPlayerEntity();
 		this.addEnemies();
 	}
@@ -62,9 +64,35 @@ class MapState extends TurboState
         this.addWall(this.width - WALL_THICKNESS, 0, WALL_THICKNESS, this.height);
     }
 
+	private function addRandomWalls():Void
+	{
+		for (i in 0 ... Std.int(Config.get("numWalls")))
+		{
+			var obstacleWidth:Int = Config.get("obstacleWidth");
+			var obstacleHeight:Int = Config.get("obstacleHeight");
+			var biggerSize:Int = Std.int(Math.max(obstacleWidth, obstacleHeight));
+
+			// Space out walls so they don't touch; they're one wall-size apart.
+			var position = this.findEmptySpace(biggerSize * 2, biggerSize * 2);
+			var x = Std.int(position.x + (biggerSize / 2));
+			var y = Std.int(position.y + (biggerSize / 2));
+
+			var isVertical:Bool = random.bool();
+			
+			if (isVertical)
+			{
+				this.addWall(x, y, biggerSize == obstacleHeight ? obstacleWidth : obstacleHeight, biggerSize);
+			}
+			else
+			{
+				this.addWall(x, y, biggerSize, biggerSize == obstacleWidth ? obstacleHeight : obstacleWidth);
+			}
+		}
+	}
+
     private function addWall(x:Int, y:Int, width:Int, height:Int):Void
     {
-        var wall = new Entity("wall").size(width, height).colour(0, 64, 0).immovable().move(x, y);
+        var wall = new Entity("wall").size(width, height).colour(128, 128, 128).immovable().move(x, y);
         this.addEntity(wall);
     }
 

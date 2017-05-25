@@ -2,6 +2,9 @@
     // Generic map stuff
     "minEnemies": 8,
     "maxEnemies": 10,
+    "obstacleWidth": 32,
+    "obstacleHeight": 64,
+    "numWalls": 8,
 
     // Generic battle stuff
     "healthPotions": 3,

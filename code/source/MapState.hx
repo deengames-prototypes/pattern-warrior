@@ -110,9 +110,38 @@ class MapState extends TurboState
 		for (i in 0 ... numEnemies)
 		{
 			var pos = this.findEmptySpace(32, 32);
-			var enemy = new Entity().size(32, 32).colour(0, 0, 255).move(pos.x, pos.y);
+			var enemy = new Entity("enemy").size(32, 32).colour(0, 0, 255).move(pos.x, pos.y).collideWith("wall");		
 			this.addEntity(enemy);
+			this.randomizeVelocity(enemy);
 		}
+	}
+
+	private function randomizeVelocity(entity:Entity):Void
+	{
+		// Move erratically. Change velocity randomly every 3-5s.
+		var minWalkTimeSeconds:Int = Config.get("minWalkTimeSeconds");
+		var maxWalkTimeSeconds:Int = Config.get("maxWalkTimeSeconds");
+		var walkTime = random.int(minWalkTimeSeconds, maxWalkTimeSeconds);
+
+		var minWalkVelocity:Int = Config.get("minWalkVelocity");
+		var maxWalkVelocity:Int = Config.get("maxWalkVelocity");
+
+		var vx = random.int(minWalkVelocity, maxWalkVelocity) * (random.bool() == true ? -1 : 1);
+		var vy = random.int(minWalkVelocity, maxWalkVelocity) * (random.bool() == true ? -1 : 1);
+		entity.velocity(vx, vy);
+
+		var minWaitTime:Int = Config.get("minWaitTimeSeconds");
+		var maxWaitTime:Int = Config.get("maxWaitTimeSeconds");
+		var waitTime = random.int(minWaitTime, maxWaitTime);
+
+		entity.after(walkTime, function()
+		{
+			entity.velocity(0, 0);
+			entity.after(waitTime, function()
+			{
+				this.randomizeVelocity(entity);
+			});
+		});
 	}
 
 	private function findEmptySpace(targetWidth:Int, targetHeight:Int):FlxPoint

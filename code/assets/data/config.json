@@ -6,6 +6,14 @@
     "obstacleHeight": 64,
     "numWalls": 8,
 
+    // Stuff to do with enemies walking on the map
+    "minWalkTimeSeconds": 3,
+    "maxWalkTimeSeconds": 5,
+    "minWalkVelocity": 50,
+    "maxWalkVelocity": 100,
+    "minWaitTimeSeconds": 2,
+    "maxWaitTimeSeconds": 3,
+
     // Generic battle stuff
     "healthPotions": 3,
     "healthPercentRestoredPerPotion": 65,

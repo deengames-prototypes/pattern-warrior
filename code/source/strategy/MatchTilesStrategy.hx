@@ -122,7 +122,7 @@ class MatchTilesStrategy implements IBattleStrategy
 			e.move(x, y);
 		}
 
-		e.onClick(function(sprite:FlxSprite)
+		e.onClick(function()
 		{
 			this.processInput(e.getData("tile"));
 		});

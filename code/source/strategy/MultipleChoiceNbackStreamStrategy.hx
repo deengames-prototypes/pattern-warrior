@@ -79,7 +79,7 @@ class MultipleChoiceNbackStreamStrategy implements IBattleStrategy
             var y = LETTER_POSITIONS[i][1];
             // needs text to handle clicks...
             var e = new Entity().text("??", 72).hide().move(x, y);
-            e.onClick(function(s:FlxSprite)
+            e.onClick(function()
             {
                 this.checkChoiceForDamage(i);
             }, false);

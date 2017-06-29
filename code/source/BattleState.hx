@@ -73,7 +73,7 @@ class BattleState extends TurboState
 		statusText = new Entity().text("Memorize and attack!", 16).move(25, 500);
 		this.addEntity(statusText);
 		
-		fightButton.image("assets/images/fight.png").move(450, 350).onClick(function(s:FlxSprite)
+		fightButton.image("assets/images/fight.png").move(450, 350).onClick(function()
 		{
 			this.strategy.onFightButtonClicked();
 			this.flipUiButtonsVisibility();
@@ -81,7 +81,7 @@ class BattleState extends TurboState
 
 		this.addEntity(fightButton);
 
-		specialButton.image("assets/images/special.png").move(600, 350).onClick(function(s:FlxSprite)
+		specialButton.image("assets/images/special.png").move(600, 350).onClick(function()
 		{
 			this.strategy.onSpecialButtonClicked();
 			this.flipUiButtonsVisibility();
@@ -93,7 +93,7 @@ class BattleState extends TurboState
 		for (i in 0 ... numHealthPotions)
 		{
 			var potionButton = new Entity().image("assets/images/heal.png");
-			potionButton.move(960 - 25 - (64 * (i + 1)), 400).onClick(function(s)
+			potionButton.move(960 - 25 - (64 * (i + 1)), 400).onClick(function()
 			{
 					var health = this.player.healthComponent;
                     var toHeal = Std.int(Std.int(Config.get("healthPercentRestoredPerPotion")) / 100 * health.maximumHealth);

@@ -65,7 +65,7 @@ class NbackStreamStrategy implements IBattleStrategy
         this.currentLetterDisplay = new Entity().text("", 72).hide().move(225, 150);
         
         this.isUniqueButton = new Entity().text("Unique").hide().move(50, 200)
-        .onClick(function(s)
+        .onClick(function()
         {
             if (this.isUniqueButton.get(TextComponent).show == true)
             {
@@ -74,7 +74,7 @@ class NbackStreamStrategy implements IBattleStrategy
         }, false);
         
         this.isntUniqueButton = new Entity().text("Not Unique").hide().move(300, 200)
-        .onClick(function(s)
+        .onClick(function()
         {
             if (this.isUniqueButton.get(TextComponent).show == true)
             {
